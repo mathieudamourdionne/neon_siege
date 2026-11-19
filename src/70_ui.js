@@ -93,7 +93,7 @@ function act(a) {
     case 'resume': resumeGame(); break;
     case 'restart': resumeGame(); restartFloor(); break;
     case 'quit': toTitle(); break;
-    case 'next': if (LEVELS[UI.li].job) openJobs(); else if (UI.li + 1 < STORY()) openIntro(UI.li + 1); else { showPanel('pEnd'); $('endMsg').textContent = "THE STAFF ARE FREE, AND THE REGISTRY NAMES NAMES:\nCOUNCILLORS, JUDGES, EDITORS - ALL ON TAPE IN SUITE 4.\n\nTHE REST OF ACT 2 IS COMING: OBSERVATION, THE CLEAN ONES,\nMANSION, AND THE HOST."; } break;
+    case 'next': if (LEVELS[UI.li].job) openJobs(); else if (UI.li + 1 < STORY()) openIntro(UI.li + 1); else { showPanel('pEnd'); $('endMsg').textContent = "ACT 2 COMPLETE.\n\nTHE HOST IS DEAD. THE MASTER DRIVE HOLDS EVERY TAPE FROM SUITE 4,\nAND NADIA IS PUTTING IT ON EVERY SCREEN IN PORT OSTRA.\n\nORISON KNOWS YOUR FACE NOW.\nACT 3 IS COMING: THE TOWER."; } break;
   }
 }
 const STORY = () => LEVELS.filter(l => !l.job && !l.hub).length, money = n => '$' + Math.round(n).toLocaleString('en-US');

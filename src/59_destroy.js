@@ -33,7 +33,7 @@ function destInit() {
   SEED = 7000 + G.li * 31 + G.fi * 7;
   // what kind of place is this floor?
   let ind = 0, tot = 0; for (let i = 0; i < N; i++) if (M.fl[i] && !M.wall[i]) { tot++; if (INDUSTRIAL.includes(FL_IDS[M.fl[i] - 1])) ind++; }
-  const gala = /GALA/.test(LEVELS[G.li].name), industrial = ind / Math.max(1, tot) > 0.3 && !gala, outdoors = ['sand', 'rock'].some(k => countFl(k) > tot * 0.3);
+  const gala = /GALA|MANSION|HOST/.test(LEVELS[G.li].name), industrial = ind / Math.max(1, tot) > 0.3 && !gala, outdoors = ['sand', 'rock'].some(k => countFl(k) > tot * 0.3);
   // cells we must keep clear: doors, exit, spawn, captives, enemies, items, switches, zones
   const busy = new Uint8Array(N), mark = (x, y, r) => { for (let j = -r; j <= r; j++) for (let i = -r; i <= r; i++) { const X = x + i, Y = y + j; if (X >= 0 && Y >= 0 && X < W && Y < H) busy[Y * W + X] = 1; } };
   for (const d of b.doors) { mark(d.x, d.y, 2); mark(d.x + (d.o === 'h' ? 1 : 0), d.y + (d.o === 'v' ? 1 : 0), 2); }
@@ -145,7 +145,7 @@ const smokeK = s => Math.min(1, s.t * 3, (s.life - s.t) / 1.8);
 // ---------- per frame ----------
 function destUpdate(dt) {
   for (const d of G.dest) if (d.k === 'barrel' && !d.dead && d.fuse >= 0) { d.fuse -= dt; if (Math.random() < dt * 30) part(d.x + rr(-2, 2), d.y - 3, rr(-30, 30), rr(-60, -20), 0.25, pick(['#ffd040', '#fff', '#ff7a1a']), 1); if (d.fuse <= 0) explodeBarrel(d); }
-  for (const s of G.smoke) { s.t += dt; s.r = Math.min(34, s.r + dt * 60); } G.smoke = G.smoke.filter(s => s.t < s.life);
+  for (const s of G.smoke) { s.t += dt; s.r = Math.min(s.fire ? 20 : 34, s.r + dt * (s.fire ? 25 : 60)); } G.smoke = G.smoke.filter(s => s.t < s.life);
   for (const f of G.fish) { f.t += dt; if (f.t < f.life) { f.hop -= dt; if (f.hop <= 0 && f.z <= 0) { f.hop = rr(0.25, 0.7); f.vz = rr(30, 60); f.vx = rr(-30, 30); f.vy = rr(-30, 30); f.va = rr(-10, 10); } } f.vz -= 220 * dt; f.z = Math.max(0, f.z + f.vz * dt); if (f.z <= 0) { f.vx *= 0.8; f.vy *= 0.8; f.vz = Math.max(0, f.vz); f.va = 0; } const nx = f.x + f.vx * dt, ny = f.y + f.vy * dt; if (!solidAt(nx, ny)) { f.x = nx; f.y = ny; } f.a += (f.va || 0) * dt; }
   fireTick(dt); for (const f of G.dfx) f.t += dt; G.dfx = G.dfx.filter(f => f.t < f.life);
   // bloody footprints
@@ -162,5 +162,5 @@ function drawDest(x) {
   for (const f of G.dfx) if (f.k === 'fire') { const k = 1 - f.t / f.life; for (let i = 0; i < 6; i++) { const a = G.time * 3 + i * 1.7, r = 3 + Math.sin(G.time * 9 + i) * 1.2; x.fillStyle = `rgba(255,${120 + i * 15},40,${0.7 * k})`; x.beginPath(); x.ellipse(f.x + Math.cos(a) * 3, f.y + Math.sin(a) * 2 - 1, r * k + 0.5, (r + 1) * k + 0.5, 0, 0, 6.29); x.fill(); } x.fillStyle = `rgba(255,240,180,${0.8 * k})`; x.fillRect(f.x - 1, f.y - 2, 2, 2); }
 }
 function drawSmoke(x) {
-  for (const s of G.smoke) { const k = smokeK(s); for (let i = 0; i < 9; i++) { const a = s.seed + i * 0.7 + G.time * 0.12, d = s.r * (i ? 0.55 : 0), r = s.r * (i ? 0.55 : 0.7) + Math.sin(G.time * 0.8 + i) * 1.5; x.fillStyle = `rgba(${i % 2 ? 236 : 214},${i % 2 ? 240 : 222},${i % 2 ? 242 : 228},${0.62 * k})`; x.beginPath(); x.arc(s.x + Math.cos(a) * d, s.y + Math.sin(a) * d, Math.max(1, r), 0, 6.29); x.fill(); } }
+  for (const s of G.smoke) { const k = smokeK(s); for (let i = 0; i < 9; i++) { const a = s.seed + i * 0.7 + G.time * 0.12, d = s.r * (i ? 0.55 : 0), r = s.r * (i ? 0.55 : 0.7) + Math.sin(G.time * 0.8 + i) * 1.5; x.fillStyle = s.fire ? `rgba(${i % 2 ? 70 : 52},${i % 2 ? 64 : 50},${i % 2 ? 66 : 54},${0.55 * k})` : `rgba(${i % 2 ? 236 : 214},${i % 2 ? 240 : 222},${i % 2 ? 242 : 228},${0.62 * k})`; x.beginPath(); x.arc(s.x + Math.cos(a) * d, s.y + Math.sin(a) * d, Math.max(1, r), 0, 6.29); x.fill(); } }
 }

@@ -32,7 +32,7 @@ function useSwitch(s) {
   if (s.kind === 'console' && def.crane) { if (G.crane.cd > 0 || G.crane.drop) { sfx('noway'); return; } G.crane.drop = { t: 0 }; G.crane.cd = 3.2; sfx('crane'); banner('CONTAINER DROPPING', '#ffe14d'); return; }
   s.done = true; sfx(s.kind === 'breaker' ? 'power' : s.kind === 'valve' ? 'plant' : 'hack', s.ux, s.uy);
   G.flash = 0.15; for (let i = 0; i < 10; i++) part(s.ux, s.uy, rr(-120, 120), rr(-120, 120), rr(0.15, 0.35), pick(['#ffe14d', '#fff', '#3ff']), 1);
-  if (s.kind === 'console' && G.hold && !G.hold.started) { G.hold.started = true; banner('HOLD THE LANDING', '#ff2a8a'); sfx('alarm'); }
+  if (s.kind === 'console' && G.hold && !G.hold.started) { G.hold.started = true; banner(def.hold.startText || 'HOLD THE LANDING', '#ff2a8a'); sfx('alarm'); }
   objHit(s.kind, s.ux, s.uy);
 }
 // ---------- smashable racks ----------

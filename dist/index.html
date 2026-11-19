@@ -1633,6 +1633,139 @@ LEVELS.push(
   }
 );
 
+// ---------- ACT 2, part 2: Observation, The Clean Ones, Mansion, The Host ----------
+LEVELS.push(
+  {
+    name: 'OBSERVATION', sub: 'ACT 2 - THE SURVEILLANCE WING', par: 280, music: 6, bgHue: 160, act: 2,
+    msg: { who: 'NADIA REN // RADIO', text: "THE LIFT GOES UP INTO THE OBSERVATION WING. EVERY ROOM IN THE MANSION IS WIRED TO THESE SCREENS.\nCAMERAS SWEEP THE HALLS. IF ONE SEES YOU, THE WHOLE WING COMES RUNNING - SHOOT THEM OUT FIRST.\n\nWIPE THE ARCHIVE SERVERS. THEN PULL THE MASTER DRIVE FROM THE VAULT. THAT'S OUR PROOF." },
+    floors: [
+      { name: 'MONITOR HALL', w: 64, h: 40, wall: ['#2a4a4a', '#8ad8c8'], tip: 'CAMERAS SEE IN A CONE. SHOOT OR SMASH THEM BEFORE THEY SPOT YOU.',
+        objs: [{ k: 'rack', n: 8, label: 'WIPE THE ARCHIVE' }],
+        build(b) {
+          b.r(2, 17, 6, 6, 'lift').st(4, 19, 'r').r(9, 17, 46, 5, 'dark').d(8, 19, 'v', 0, 'dark');
+          b.r(9, 3, 16, 13, 'dark').d(15, 16, 'h').o('tvwall', 11, 3).o('tvwall', 17, 3).o('console', 11, 8).o('console', 15, 8).o('console', 19, 8).o('desk', 12, 12);
+          b.r(26, 3, 14, 13, 'plate').d(32, 16, 'h').rack(28, 5).rack(34, 5).rack(28, 10).rack(34, 10);
+          b.r(41, 3, 14, 13, 'carpet').d(47, 16, 'h').o('desk', 44, 6).o('shelf', 50, 3).o('sofa', 43, 12).o('plant', 54, 15);
+          b.t(52, 7, "OBSERVATION LOG\nSUITE 4: 31 GUESTS THIS SEASON.\nMASTER COPIES TO THE VAULT. NO EXCEPTIONS.\n- THE HOST", 'DUTY LOG');
+          b.r(9, 23, 20, 14, 'plate').d(18, 22, 'h').rack(11, 26).rack(17, 26).rack(23, 26).rack(11, 31).rack(17, 31).rack(23, 31);
+          b.r(30, 23, 12, 14, 'tile').d(35, 22, 'h').o('table', 32, 27).o('table', 37, 31).o('locker', 41, 24).o('locker', 41, 27).o('vend', 30, 35);
+          b.r(43, 23, 12, 14, 'dark').d(48, 22, 'h').o('server', 45, 26).o('server', 50, 26).o('server', 45, 31).o('server', 50, 31);
+          b.r(56, 15, 6, 9, 'lift').d(55, 18, 'v', 0, 'lift').ex(57, 16, 4, 6, 'THE VAULT');
+          b.cam(9, 17, 0.15, 0.35).cam(54, 21, Math.PI + 0.15, 0.35).cam(24, 4, 2.4, 0.5).cam(39, 15, -2.4, 0.6).cam(28, 24, 2.4, 0.6).cam(43, 36, -0.8, 0.6);
+          b.e('grd', 30, 19, 'pistol', 'r', { p: [[30, 19], [50, 19]] }).e('grd', 13, 6, 'smg', 'd').e('tec', 21, 12, null, 'l').e('grd', 18, 13, 'pipe', 'l');
+          b.e('grd', 31, 8, 'pistol', 'r').e('fat', 37, 13, 'pipe', 'u').e('cln', 46, 9, 'smart', 'l').e('grd', 50, 12, 'pistol', 'u');
+          b.e('grd', 14, 29, 'machete', 'r').e('rio', 21, 34, 'pistol', 'u').e('grd', 26, 29, 'smg', 'l');
+          b.e('grd', 33, 25, 'pistol', 'r').e('brc', 38, 34, 'pump', 'l').e('grd', 47, 29, 'pistol', 'r').e('tec', 52, 34, null, 'l');
+          b.i('silp', 5, 21).i('pipe', 6, 18);
+          b.sp(60, 20).sp(10, 36).sp(54, 4);
+        } },
+      { name: 'THE VAULT', w: 52, h: 34, wall: ['#2a4a4a', '#8ad8c8'], tip: 'PULL THE DRIVE AT THE VAULT CONSOLE (E), THEN HOLD WHILE NADIA COPIES IT.',
+        objs: [{ k: 'console', n: 1, label: 'PULL THE MASTER DRIVE' }, { k: 'hold', n: 1, label: 'HOLD WHILE IT COPIES' }],
+        hold: { t: 30, every: 5, startText: 'COPYING - HOLD THE VAULT', doneText: 'DRIVE COPIED', waves: [[['grd', 'smg'], ['grd', 'pistol']], [['cln', 'smart'], ['grd', 'pistol']], [['brc', 'pump'], ['hnd', null]], [['cln', 'smg'], ['rio', 'pistol']]] },
+        build(b) {
+          b.r(2, 14, 6, 6, 'lift').st(4, 16, 'r').r(9, 13, 34, 8, 'marble').d(8, 16, 'v', 0, 'marble').o('pillar', 15, 14).o('pillar', 15, 18).o('pillar', 27, 14).o('pillar', 27, 18);
+          b.r(30, 2, 14, 10, 'plate').d(36, 12, 'h').sw(36, 3, 'console', 'MASTER DRIVE').o('server', 31, 3).o('server', 41, 3).o('server', 31, 8).o('server', 41, 8);
+          b.r(9, 2, 20, 10, 'dark').d(18, 12, 'h').o('tvwall', 12, 2).o('tvwall', 20, 2).o('console', 13, 6).o('console', 19, 6).o('desk', 23, 8);
+          b.r(9, 22, 16, 10, 'carpet').d(16, 21, 'h').o('sofa', 11, 28).o('table', 17, 25).o('plant', 24, 31);
+          b.r(26, 22, 17, 10, 'dark').d(33, 21, 'h').o('server', 28, 24).o('server', 33, 24).o('server', 38, 24).o('crate', 29, 29);
+          b.r(44, 13, 6, 8, 'lift').d(43, 16, 'v', 0, 'lift').ex(45, 14, 4, 6, 'EAST WING');
+          b.cam(9, 13, 0.25, 0.4).cam(43, 11, -2.4, 0.5).cam(42, 31, -2.2, 0.5);
+          b.e('grd', 21, 16, 'pistol', 'r', { p: [[21, 16], [38, 16]] }).e('grd', 34, 6, 'smg', 'd').e('cln', 39, 9, 'smart', 'l');
+          b.e('grd', 14, 9, 'pistol', 'r').e('tec', 24, 5, null, 'l').e('grd', 13, 25, 'machete', 'r').e('grd', 36, 28, 'pistol', 'l').e('hnd', 30, 27, null, 'r');
+          b.sp(46, 18).sp(11, 30).sp(12, 3).sp(40, 30);
+        } }
+    ]
+  },
+  {
+    name: 'THE CLEAN ONES', sub: 'ACT 2 - THE EAST WING, BURNING', par: 240, music: 7, bgHue: 15, act: 2,
+    msg: { who: 'NADIA REN // RADIO', text: "ORISON SENT THE CLEAN ONES. THEY'RE BURNING THE EAST WING TO WIPE THE EVIDENCE -\nWITH THE STAFF STILL LOCKED IN THEIR ROOMS.\n\nGET THEM OUT BEFORE THE ROOF COMES DOWN. DON'T STAND IN THE FLAMES.\nCLEANERS ARE FAST AND THEY DON'T MISS. USE THE SMOKE - THEY CAN'T SEE THROUGH IT EITHER." },
+    floors: [
+      { name: 'EAST WING', w: 64, h: 40, wall: ['#5a3a2a', '#d8a878'], fireHurts: true, tip: 'FREE THE STAFF (E AT EACH CELL). FIRE SPREADS ROOM TO ROOM AND KILLS ON CONTACT.',
+        blaze: { seeds: [[20, 30], [47, 28], [26, 9], [56, 19]], every: 0.5, chance: 0.18, max: 200, life: 14 },
+        objs: [{ k: 'cage', n: 5, label: 'FREE THE STAFF' }],
+        onStart() { G.timer = { t: 150, label: 'THE ROOF COMES DOWN', lose: 'THE ROOF CAME DOWN. SO DID YOU.' }; },
+        build(b) {
+          b.r(2, 17, 6, 6, 'conc').st(4, 19, 'r').r(9, 17, 50, 5, 'wood').d(8, 19, 'v', 0, 'wood').o('plant', 20, 17).o('plant', 40, 21);
+          b.r(9, 3, 11, 13, 'carpet').d(14, 16, 'h').o('bed', 10, 4).o('locker', 18, 3).cage(16, 9);
+          b.r(21, 3, 11, 13, 'carpet').d(26, 16, 'h').o('bed', 22, 4).o('locker', 30, 3).cage(28, 9);
+          b.r(33, 3, 11, 13, 'carpet').d(38, 16, 'h').o('bed', 34, 4).o('locker', 42, 3).cage(40, 9);
+          b.r(45, 3, 14, 13, 'carpet').d(51, 16, 'h').o('bed', 46, 4).o('desk', 53, 4).o('sofa', 47, 13);
+          b.t(55, 8, "CLEANUP ORDER 7\nEAST WING: TOTAL LOSS. NO WITNESSES.\nINSURANCE CLAIM: ELECTRICAL FAULT.", 'CLEANER TABLET');
+          b.r(9, 23, 24, 14, 'wood').d(20, 22, 'h').o('sofa', 11, 25).o('piano', 25, 25).o('table', 15, 30).cage(11, 33);
+          b.r(34, 23, 25, 14, 'tile').d(45, 22, 'h').o('sink', 36, 24).o('sink', 38, 24).o('shower', 57, 24).o('crate', 40, 33).cage(53, 32);
+          b.r(60, 15, 3, 9, 'conc').d(59, 18, 'v', 0, 'conc').ex(60, 16, 3, 6, 'SERVICE STAIRS');
+          b.e('cln', 30, 19, 'flare', 'l').e('cln', 50, 19, 'smg', 'l').e('grd', 14, 12, 'pistol', 'd').e('cln', 25, 6, 'flare', 'r');
+          b.e('grd', 37, 12, 'pipe', 'r').e('cln', 52, 8, 'smart', 'l').e('grd', 56, 13, 'pistol', 'l');
+          b.e('cln', 18, 27, 'flare', 'r').e('grd', 28, 33, 'smg', 'l').e('tec', 13, 29, null, 'r');
+          b.e('cln', 42, 28, 'pistol', 'r').e('grd', 50, 26, 'pistol', 'l').e('fat', 46, 34, 'pipe', 'u');
+          b.i('ar', 5, 21).i('pipe', 6, 18);
+          b.sp(61, 22).sp(10, 36).sp(57, 3);
+        } }
+    ]
+  },
+  {
+    name: 'MANSION', sub: 'ACT 2 - THE MAIN HOUSE', par: 320, music: 11, bgHue: 330, act: 2,
+    msg: { who: 'NADIA REN // RADIO', text: "THE MAIN HOUSE. THE GUESTS RAN - IT'S JUST THE HOST'S PRIVATE GUARD NOW.\nCHANDELIERS HANG OVER THE BIG ROOMS. SHOOT ONE AND IT COMES DOWN ON WHOEVER'S UNDER IT.\n\nTHE HOST IS ON THE TOP FLOOR. GO UP." },
+    floors: [
+      { name: 'GRAND HALL', w: 64, h: 40, wall: ['#4a2a3a', '#e8c8a8'], tip: 'SHOOT A CHANDELIER WHEN GUARDS ARE UNDER IT. DON\'T STAND UNDER ONE YOURSELF.',
+        build(b) {
+          b.r(28, 34, 8, 4, 'marble').st(31, 36, 'u').r(14, 14, 36, 19, 'marble').d(31, 33, 'h');
+          b.o('pillar', 18, 17).o('pillar', 44, 17).o('pillar', 18, 28).o('pillar', 44, 28).o('statue', 31, 22).o('plant', 14, 14).o('plant', 49, 14).o('plant', 14, 32).o('plant', 49, 32);
+          b.chand(23, 19).chand(40, 19).chand(23, 27).chand(40, 27).chand(31, 17);
+          b.r(2, 14, 11, 19, 'carpet').d(13, 22, 'v').o('ltable', 4, 17).o('ltable', 4, 25).o('counter', 3, 31);
+          b.r(51, 14, 11, 19, 'wood').d(50, 22, 'v').o('shelf', 53, 14).o('shelf', 57, 14).o('shelf', 53, 20).o('shelf', 57, 26).o('desk', 54, 29);
+          b.r(14, 2, 36, 11, 'marble').d(24, 13, 'h').d(38, 13, 'h').o('piano', 18, 4).o('bar', 38, 2).o('sofa', 28, 9).o('sofa', 33, 9).chand(24, 7).chand(40, 7);
+          b.r(2, 2, 11, 11, 'carpet').d(13, 7, 'v').o('plant', 2, 2).ex(3, 3, 5, 5, 'UP THE STAIRS');
+          b.e('grd', 25, 18, 'pistol', 'r').e('grd', 39, 24, 'pipe', 'l').e('cln', 37, 19, 'smart', 'l').e('rio', 22, 24, 'pistol', 'r').e('grd', 41, 30, 'machete', 'l');
+          b.o('sofa', 20, 22).o('sofa', 41, 22).o('table', 25, 29).o('table', 37, 29).o('table', 27, 15).o('table', 35, 15);
+          b.e('grd', 5, 20, 'pistol', 'r').e('brc', 9, 28, 'pump', 'u').e('grd', 56, 18, 'machete', 'l').e('fat', 58, 30, 'pipe', 'l');
+          b.e('grd', 22, 6, 'smg', 'r').e('cln', 30, 5, 'pistol', 'd').e('grd', 44, 8, 'pistol', 'l').e('hnd', 36, 11, null, 'l').e('snp', 47, 4, 'rifle', 'l');
+          b.e('grd', 8, 9, 'pistol', 'd');
+          b.sp(31, 37).sp(60, 31).sp(3, 31);
+        } },
+      { name: 'THE GALLERY', w: 64, h: 40, wall: ['#4a2a3a', '#e8c8a8'], tip: 'THE HOST\'S LIFT IS AT THE FAR END OF THE LOWER HALL.',
+        build(b) {
+          b.r(2, 2, 6, 6, 'lift').st(4, 4, 'r').r(9, 2, 46, 8, 'marble').d(8, 4, 'v', 0, 'marble');
+          b.o('statue', 15, 3).o('statue', 27, 7).o('statue', 39, 3).o('statue', 51, 7).chand(19, 5).chand(31, 5).chand(44, 5);
+          b.r(9, 11, 14, 12, 'carpet').d(15, 10, 'h').d(15, 23, 'h').o('bed', 10, 12).o('sofa', 18, 20).o('plant', 22, 11);
+          b.r(24, 11, 16, 12, 'wood').d(31, 10, 'h').d(31, 23, 'h').o('bar', 26, 11).o('table', 27, 16).o('table', 34, 16).o('plant', 39, 22);
+          b.r(41, 11, 14, 12, 'carpet').d(47, 10, 'h').d(47, 23, 'h').o('desk', 44, 14).o('shelf', 50, 11).o('tank', 43, 18);
+          b.t(52, 15, "PRIVATE LEDGER\nVOSS - PAID. OKAFOR - PAID.\nTHE TAPES ARE INSURANCE. THE ISLAND IS MINE.\n- THE HOST", 'LEDGER');
+          b.r(9, 24, 46, 6, 'marble').chand(20, 27).chand(40, 27).o('pillar', 30, 25);
+          b.r(9, 31, 46, 7, 'carpet').d(20, 30, 'h').d(44, 30, 'h').o('sofa', 12, 36).o('sofa', 24, 36).o('piano', 34, 32).o('plant', 54, 37);
+          b.r(56, 24, 6, 6, 'lift').d(55, 26, 'v', 0, 'lift').ex(57, 25, 4, 4, 'PENTHOUSE LIFT');
+          b.e('grd', 22, 5, 'pistol', 'r', { p: [[22, 5], [48, 5]] }).e('cln', 36, 7, 'smg', 'l').e('grd', 52, 4, 'pistol', 'l');
+          b.e('grd', 12, 16, 'pistol', 'r').e('brc', 20, 14, 'pump', 'l').e('grd', 29, 19, 'smg', 'r').e('rio', 36, 13, 'pistol', 'd').e('cln', 51, 20, 'smart', 'l').e('grd', 44, 21, 'pistol', 'u');
+          b.e('grd', 16, 27, 'pistol', 'r').e('fat', 38, 27, 'pipe', 'l').e('hnd', 50, 26, null, 'l');
+          b.e('grd', 16, 33, 'machete', 'r').e('cln', 30, 35, 'pistol', 'r').e('grd', 46, 34, 'smg', 'l');
+          b.sp(58, 28).sp(10, 37).sp(53, 3);
+        } }
+    ]
+  },
+  {
+    name: 'THE HOST', sub: 'ACT 2 - THE PENTHOUSE', par: 240, music: 12, bgHue: 345, act: 2,
+    msg: { who: 'NADIA REN // RADIO', text: "THE HOST. HE OWNS THE ISLAND, THE PARTY AND EVERY PERSON ON THOSE TAPES.\nHE'S IN HIS PANIC ROOM BEHIND ARMORED GLASS.\n\nCUT THE THREE POWER LINES AND THE GLASS COMES DOWN. THEN FINISH IT." },
+    floors: [
+      { name: 'THE PENTHOUSE', w: 60, h: 40, wall: ['#3a1a2a', '#e8b8c8'], tip: 'CUT THE THREE POWER LINES (E AT EACH BREAKER). THE GLASS DROPS WHEN ALL THREE ARE OUT.',
+        objs: [{ k: 'breaker', n: 3, label: 'CUT THE POWER LINES' }],
+        on(k, n) { if (k !== 'breaker') return; if (n < 3) { banner('POWER LINE ' + n + ' OF 3', '#ffe14d'); spawnWave([['cln', 'smg'], ['grd', 'pistol']]); } else { openGate('glass'); banner('THE GLASS IS DOWN', '#ff3b4e'); G.shake = 0.6; for (const e of G.ents) if (e.t === 'hst') { e.st = 'alert'; e.lx = G.player.x; e.ly = G.player.y; } } },
+        build(b) {
+          b.r(27, 35, 6, 4, 'lift').st(30, 37, 'u').r(8, 8, 44, 26, 'marble').d(29, 34, 'h');
+          b.r(24, 2, 12, 5, 'plate').r(26, 7, 8, 1, 'plate').gate('glass', 26, 7, 8, 1, 'glass').o('desk', 28, 2).o('server', 25, 2).o('server', 33, 2).ex(25, 3, 3, 3, 'THE ARCHIVE');
+          b.r(2, 14, 5, 8, 'dark').d(7, 17, 'v').sw(3, 15, 'breaker', 'POWER LINE');
+          b.r(53, 14, 5, 8, 'dark').d(52, 17, 'v').sw(55, 15, 'breaker', 'POWER LINE');
+          b.r(40, 2, 10, 5, 'dark').d(44, 7, 'h').sw(46, 2, 'breaker', 'POWER LINE');
+          b.o('pillar', 15, 13).o('pillar', 43, 13).o('pillar', 15, 26).o('pillar', 43, 26).o('sofa', 22, 20).o('sofa', 35, 20).o('tank', 28, 16).o('bar', 10, 9).o('piano', 46, 30).o('plant', 8, 33).o('plant', 51, 33).o('statue', 20, 30).o('statue', 39, 30);
+          b.chand(20, 16).chand(39, 16).chand(29, 26).o('table', 12, 20).o('table', 46, 20).o('pillar', 22, 10).o('pillar', 36, 10).o('sofa', 27, 30);
+          b.e('hst', 30, 4, 'smart', 'd');
+          b.e('cln', 14, 18, 'smg', 'r').e('cln', 45, 22, 'smart', 'l').e('grd', 24, 12, 'pipe', 'd').e('grd', 36, 28, 'machete', 'u').e('rio', 30, 22, 'pistol', 'd').e('grd', 4, 19, 'pistol', 'r').e('grd', 55, 19, 'pistol', 'l').e('hnd', 46, 10, null, 'l').e('hnd', 12, 28, null, 'r');
+          b.i('pump', 31, 33).i('frag', 28, 33);
+          b.sp(30, 38).sp(9, 9).sp(50, 9).sp(9, 32).sp(50, 32);
+        } }
+    ]
+  }
+);
+
 // ---------- JOBS: loud heists, played from the JOBS menu (kept after the story levels so chapter numbers don't move) ----------
 const COPS = { grd: ['grd', 'smg'], grdp: ['grd', 'pistol'], brc: ['brc', 'pump'], rio: ['rio', 'pistol'], fat: ['fat', 'pump'], hnd: ['hnd', null], cln: ['cln', 'smg'] };
 const W_ = (...k) => k.map(q => COPS[q]);
@@ -1926,7 +2059,7 @@ function startFloor(fi, carry) {
   for (const s of b.ens) spawnEnemy(s.t, (s.x + 0.5) * CELL, (s.y + 0.5) * CELL, s.w, s.a, s.p);
   for (const it of b.items) G.items.push({ k: it.k, x: (it.x + 0.5) * CELL, y: (it.y + 0.5) * CELL, ammo: WEAPONS[it.k] ? (WEAPONS[it.k].ammo || 0) : 2, a: rr(0, 6.28) });
   for (const w of b.wits) G.civs.push({ t: 'nadia', x: (w.x + 0.5) * CELL, y: (w.y + 0.5) * CELL, a: Math.PI, st: 'held', wit: 1 });
-  mechInit(def); heistInit(def); destInit(); varyFloor(); warmFloor();
+  mechInit(def); heistInit(def); act2bInit(def); destInit(); varyFloor(); warmFloor();
   G.cam = { x: P.x, y: P.y }; GFX.ch.player = playerSet(G.implant, false); G.hackedE = null;
   G.state = 'play'; banner(def.name, '#ffe14d'); const tok = G.floorTok = (G.floorTok || 0) + 1; if (def.tip) setTimeout(() => { if (G.state === 'play' && G.floorTok === tok) toast(def.tip); }, 1800);
   musicStart(LEVELS[G.li].music);
@@ -2083,7 +2216,7 @@ function killE(e, how, ang, byP, method) {
   goreKill(e, how, ang, method); sfx(how === 'shot' || how === 'shotgun' ? 'gib' : 'splat', e.x, e.y); G.shake = Math.max(G.shake, how === 'shotgun' || how === 'exec' ? 0.6 : 0.35);
   if (byP) { G.hitStop = Math.max(G.hitStop, how === 'shotgun' || how === 'exec' ? 0.06 : 0.035); G.zp = Math.max(G.zp, how === 'exec' ? 0.09 : 0.05); }
   if (G.player.lock === e) G.player.lock = null;
-  if (ETYPE[e.t].boss) { banner(e.t === 'hdl' ? 'THE HANDLER IS DOWN' : G.ents.some(o => o !== e && ETYPE[o.t].boss && o.st !== 'dead') ? 'ONE TWIN DOWN' : 'BOTH TWINS DOWN', '#ffe14d'); G.hitStop = 0.15; }
+  if (ETYPE[e.t].boss) { banner(e.t === 'hdl' ? 'THE HANDLER IS DOWN' : e.t === 'hst' ? 'THE HOST IS DOWN' : G.ents.some(o => o !== e && ETYPE[o.t].boss && o.st !== 'dead') ? 'ONE TWIN DOWN' : 'BOTH TWINS DOWN', '#ffe14d'); G.hitStop = 0.15; }
   if (byP && method !== 'puppet' && how !== 'burn') coverCheck(e);
   if (byP) { G.stats.kills++; if (how === 'exec') G.stats.execs++; if (!e.everSaw) G.stats.unseen = (G.stats.unseen || 0) + 1; if (how === 'shotgun' || how === 'cut' || how === 'exec') G.stats.brutal = (G.stats.brutal || 0) + 1; addScore(how === 'exec' ? 700 : 400, e.x, e.y, how === 'burn' ? 'BURNOUT' : method === 'puppet' ? 'PUPPET' : method === 'rail' ? 'RAILED' : method === 'rocket' || method === 'frag' || method === 'barrel' ? 'BOOM' : method === 'bleed' ? 'BLED OUT' : method === 'emp' ? 'FRIED' : method === 'knife' ? 'KNIFED' : method === 'blades' ? 'SLICED' : how === 'exec' ? 'FINISHER' : how === 'throw' ? 'THROWN' : '', method);  }
   checkClear();
@@ -2407,7 +2540,7 @@ function updBullets(dt) {
       if (tg) { const na = turn(a, Math.atan2(tg.y - b.y, tg.x - b.x), b.smart * dt); b.vx = Math.cos(na) * sp; b.vy = Math.sin(na) * sp; }
       (b.trail = b.trail || []).push([b.x, b.y]); if (b.trail.length > 8) b.trail.shift();
     }
-    bulletMove(b, b.vx * dt * sl, b.vy * dt * sl); if (b.t > 1) b.rem = true;
+    bulletMove(b, b.vx * dt * sl, b.vy * dt * sl); if (b.t > 1) b.rem = true; if (G.cams && (G.cams.length || G.chands.length)) bulletHang(b);
   }
   G.bullets = G.bullets.filter(b => !b.rem);
   for (const t of G.thrown) {
@@ -2445,7 +2578,7 @@ function updateGame(dt) {
   if (G.player.lock && (G.player.lock.st === 'dead' || G.player.lock.st === 'down')) G.player.lock = null;
   for (const p of G.pops) p.t += dt; G.pops = G.pops.filter(p => p.t < 1.3);
   for (const c of G.civs) if (c.st === 'free') { c.t = (c.t || 0) + dt; if (c.t > 1.5) c.gone = true; } else if (c.st === 'run') civRun(c, dt);
-  mechUpdate(edt); heistUpdate(edt); if (G.birds.length) updBirds(dt); if (G.storm) updStorm(dt); if (G.disguise) updDisguise(dt); updGuests(dt);
+  mechUpdate(edt); heistUpdate(edt); act2bUpdate(edt); if (G.birds.length) updBirds(dt); if (G.storm) updStorm(dt); if (G.disguise) updDisguise(dt); updGuests(dt);
   G.shake = Math.max(0, G.shake - dt * 2.5); G.flash = Math.max(0, G.flash - dt * 2); G.muzzle = Math.max(0, (G.muzzle || 0) - dt);
   if (G.banner) { G.banner.life -= dt; if (G.banner.life <= 0) G.banner = null; } if (G.toast) { G.toast.life -= dt; if (G.toast.life <= 0) G.toast = null; } if (G.lore) { G.lore.life -= dt; if (G.lore.life <= 0) G.lore = null; }
 }
@@ -2587,6 +2720,7 @@ function drawHeist(x) {
   if (!G.piles) return; drawHeistExtras(x);
   const z = G.secureZ; if (z) { const p = 0.5 + 0.5 * Math.sin(G.time * 4); x.fillStyle = `rgba(93,255,154,${0.07 + p * 0.06})`; x.fillRect(z.x * CELL, z.y * CELL, z.w * CELL, z.h * CELL); x.strokeStyle = 'rgba(93,255,154,0.55)'; x.lineWidth = 1; x.setLineDash([3, 3]); x.strokeRect(z.x * CELL + 0.5, z.y * CELL + 0.5, z.w * CELL - 1, z.h * CELL - 1); x.setLineDash([]); }
   for (const g of G.gates) if (!g.open && g.kind !== 'virtual') { const X = g.x * CELL, Y = g.y * CELL, w = g.w * CELL, h = g.h * CELL; x.fillStyle = '#140c10'; x.fillRect(X - 0.5, Y - 0.5, w + 1, h + 1); x.fillStyle = g.kind === 'key' ? '#5a6068' : '#7a7e88'; x.fillRect(X, Y, w, h); x.fillStyle = g.kind === 'key' ? '#3a3e46' : '#9aa0a8';
+    if (g.kind === 'glass') { x.fillStyle = 'rgba(120,220,255,0.55)'; x.fillRect(X, Y, w, h); x.fillStyle = 'rgba(255,255,255,0.8)'; for (let i = 3; i < w - 2; i += 9) x.fillRect(X + i, Y + 1, 3, 1); x.fillStyle = '#c8ccd2'; x.fillRect(X, Y, w, 1); x.fillRect(X, Y + h - 1, w, 1); continue; }
     if (g.kind === 'key') { for (let i = 1; i < Math.max(w, h); i += 2.5) w > h ? x.fillRect(X + i, Y + 1, 1, h - 2) : x.fillRect(X + 1, Y + i, w - 2, 1); x.fillStyle = '#2a6ab8'; x.fillRect(X + w / 2 - 1.5, Y + h / 2 - 1.5, 3, 3); x.fillStyle = G.hasKey ? '#5dff9a' : '#ff3b4e'; x.fillRect(X + w / 2 - 0.5, Y + h / 2 - 0.5, 1, 1); }
     else { x.beginPath(); x.arc(X + w / 2, Y + h / 2, Math.min(w, h) / 2 - 0.5, 0, 6.29); x.fill(); x.fillStyle = '#4a4e58'; x.beginPath(); x.arc(X + w / 2, Y + h / 2, Math.min(w, h) / 4, 0, 6.29); x.fill(); x.fillStyle = '#c8ccd2'; for (let a = 0; a < 6.28; a += 1.05) x.fillRect(X + w / 2 + Math.cos(a) * Math.min(w, h) * 0.36 - 0.5, Y + h / 2 + Math.sin(a) * Math.min(w, h) * 0.36 - 0.5, 1, 1); } }
   for (const p of G.piles) if (p.n > 0 && gateOpen(p.gate) && GFX.pile[p.k]) { if (p.k === 'safe' && p.locked) { x.globalAlpha = 0.75; } dRot(x, GFX.pile[p.k], p.x, p.y, 0); x.globalAlpha = 1; if (p.n > 1) { x.fillStyle = '#140c10'; x.fillRect(p.x + 5, p.y - 9, 6, 5); x.fillStyle = '#5dff9a'; x.font = 'bold 5px monospace'; x.fillText(String(p.n), p.x + 6, p.y - 5); } }
@@ -2660,7 +2794,7 @@ function useSwitch(s) {
   if (s.kind === 'console' && def.crane) { if (G.crane.cd > 0 || G.crane.drop) { sfx('noway'); return; } G.crane.drop = { t: 0 }; G.crane.cd = 3.2; sfx('crane'); banner('CONTAINER DROPPING', '#ffe14d'); return; }
   s.done = true; sfx(s.kind === 'breaker' ? 'power' : s.kind === 'valve' ? 'plant' : 'hack', s.ux, s.uy);
   G.flash = 0.15; for (let i = 0; i < 10; i++) part(s.ux, s.uy, rr(-120, 120), rr(-120, 120), rr(0.15, 0.35), pick(['#ffe14d', '#fff', '#3ff']), 1);
-  if (s.kind === 'console' && G.hold && !G.hold.started) { G.hold.started = true; banner('HOLD THE LANDING', '#ff2a8a'); sfx('alarm'); }
+  if (s.kind === 'console' && G.hold && !G.hold.started) { G.hold.started = true; banner(def.hold.startText || 'HOLD THE LANDING', '#ff2a8a'); sfx('alarm'); }
   objHit(s.kind, s.ux, s.uy);
 }
 // ---------- smashable racks ----------
@@ -3122,6 +3256,106 @@ function drawDisguise(x) {
 }
 function drawGuests(x) { for (const c of G.civs) { if (c.st !== 'guest') continue; const wf = c.walk ? Math.floor(c.legT * 2) & 7 : 8; dRot(x, GFX.ch[c.t].legs[wf], c.x, c.y, c.a); dRot(x, bodyFrame(c.t, null, 'walk', c.walk ? wf : 0), c.x, c.y, c.a); } }
 
+// ---------- end of Act 2: security cameras, spreading fire, chandeliers, The Host ----------
+Object.assign(ETYPE, { hst: { name: 'THE HOST', spd: 96, pat: 40, react: 0.3, hp: 18, armor: 1, boss: 1, strafe: 1 } });
+Object.assign(CHARS, { hst: { jacket: '#3a1238', boots: '#0a0a0a', skin: SKINS[1], hair: '#d8d8dc', legs: '#1a0a1e', stripe: '#d8a830', implant: '#ff3b4e' } });
+Object.assign(LOOKS, { hst: { hairStyle: 'slick', collar: '#d8a830', tie: '#c81e28' } });
+Object.assign(Builder.prototype, {
+  cam(x, y, a, sw) { (this.cams = this.cams || []).push({ x: x, y: y, a: a, sw: sw === undefined ? 0.6 : sw }); return this; },
+  chand(x, y) { (this.chands = this.chands || []).push({ x: x, y: y }); return this; },
+});
+function act2bGfx() {
+  if (GFX.flame) return; const fr = (k) => { const [c, x] = mkCanvas(20, 24); c.hd = 2; const g = (cx, cy, rx, ry, col) => { x.fillStyle = col; x.beginPath(); x.ellipse(cx, cy, rx, ry, 0, 0, 6.29); x.fill(); };
+    g(10, 15 + k, 8, 8, 'rgba(200,40,10,0.85)'); g(10 - k, 12, 6, 9 - k, '#ff6a1a'); g(10 + k * 0.5, 13, 4, 6, '#ffc030'); g(10, 15, 2.2, 3, '#fff6c0'); x.fillStyle = '#ffe14d'; x.fillRect(4 + k * 3, 3 + k, 1, 2); x.fillRect(15 - k * 2, 5, 1, 1); return c; };
+  GFX.flame = [fr(0), fr(1), fr(2)];
+  GFX.chand = hdc(spr(44, 44, P => { const C = 22; for (let i = 0; i < 8; i++) { const a = i / 8 * 6.283, x = C + Math.cos(a) * 15, y = C + Math.sin(a) * 15; P.ln(C, C, x, y, '#140c10', 3); P.ln(C, C, x, y, '#d8a830', 1); P.d(x, y, 2.6, 2.6, '#140c10'); P.d(x, y, 1.8, 1.8, '#fff6c0'); P.p(x, y, '#fff'); }
+    P.d(C, C, 10, 10, '#140c10'); P.d(C, C, 9, 9, '#c8962a'); P.d(C, C, 7, 7, '#9ee8ff'); P.d(C, C, 5, 5, '#d8f8ff'); P.d(C, C, 2.5, 2.5, '#d8a830'); for (let i = 0; i < 12; i++) { const a = i / 12 * 6.283 + 0.26; P.p(C + Math.cos(a) * 11.5, C + Math.sin(a) * 11.5, i % 2 ? '#bff4ff' : '#fff'); } }));
+  GFX.chandWreck = hdc(spr(48, 44, P => { const C = 22; for (let i = 0; i < 8; i++) { const a = i / 8 * 6.283 + (i % 3) * 0.3, L = 10 + (i * 7) % 9; P.ln(C, C, C + Math.cos(a) * L, C + Math.sin(a) * L, '#140c10', 3); P.ln(C, C, C + Math.cos(a) * L, C + Math.sin(a) * L, '#a8802a', 1); }
+    P.d(C, C, 8, 6, '#140c10'); P.d(C, C, 7, 5, '#8a6a2a'); for (let i = 0; i < 26; i++) { const a = i * 2.4, d = 4 + (i * 13) % 17; P.p(C + Math.cos(a) * d, C + Math.sin(a) * d, i % 3 ? '#9ee8ff' : '#fff'); } }));
+  GFX.camBody = hdc(spr(12, 10, P => { P.r(0, 1, 9, 8, '#140c10'); P.r(1, 2, 7, 6, '#4a4e58'); P.r(1, 2, 7, 1, '#8a8f99'); P.r(8, 3, 4, 4, '#140c10'); P.r(9, 4, 2, 2, '#ff3b4e'); }));
+}
+// ---------- per floor ----------
+function act2bInit(def) {
+  const b = M.b; G.cams = (b.cams || []).map(c => ({ x: (c.x + 0.5) * CELL, y: (c.y + 0.5) * CELL, a0: c.a, sw: c.sw, a: c.a, t: Math.random() * 6, see: 0, cd: 0, dead: false }));
+  G.chands = (b.chands || []).map(c => ({ x: (c.x + 0.5) * CELL, y: (c.y + 0.5) * CELL, st: 'hang', t: 0, ph: Math.random() * 6 }));
+  G.blaze = null; if (def.blaze) { G.blaze = { on: new Map(), out: new Float32Array(M.W * M.H), tick: 0, smokeT: 0 }; for (const [x, y] of def.blaze.seeds) blazeLight(y * M.W + x); }
+  if (G.cams.length || G.chands.length || G.blaze) act2bGfx();
+  G.player.burnT = 0;
+}
+// ---------- fire that spreads room to room ----------
+function blazeOk(c) { return c >= 0 && c < M.W * M.H && M.fl[c] && !M.wall[c] && !(M.solid[c] && M.tall[c]); }
+function blazeLight(c) { const B = G.blaze; if (!B || B.on.has(c) || !blazeOk(c) || B.out[c] > G.levelTime) return; B.on.set(c, 0); }
+function blazeTick(dt) {
+  const B = G.blaze, def = floorDef(); if (!B) return; const W = M.W, life = def.blaze.life || 14, P = G.player;
+  B.tick -= dt; if (B.tick <= 0) { B.tick = def.blaze.every || 0.5; const add = [];
+    for (const [c, t] of B.on) { if (Math.random() < (def.blaze.chance || 0.2) && B.on.size + add.length < (def.blaze.max || 220)) { const n = c + pick([1, -1, W, -W]); if (blazeOk(n) && !B.on.has(n) && !(B.out[n] > G.levelTime)) add.push(n); } }
+    for (const n of add) blazeLight(n); }
+  for (const [c, t] of B.on) { const nt = t + dt; if (nt > life) { B.on.delete(c); B.out[c] = G.levelTime + 40; const d = M.decX; d.fillStyle = 'rgba(14,8,6,0.55)'; d.fillRect((c % W) * CELL, ((c / W) | 0) * CELL, CELL, CELL); } else B.on.set(c, nt); }
+  // fire kills whoever stands in it (the cleaners wear fire suits)
+  const at = (x, y) => B.on.has(Math.floor(y / CELL) * W + Math.floor(x / CELL));
+  for (const e of G.ents) if (e.st !== 'dead' && e.st !== 'freed' && e.t !== 'cln' && !ETYPE[e.t].boss && at(e.x, e.y)) killE(e, 'shot', rr(0, 6.28), false, 'flare');
+  if (!P.dead && at(P.x, P.y) && def.fireHurts) { P.burnT += dt; if (P.burnT > 0.25) { P.burnT = 0; if (hurtPlayer(null, rr(0, 6.28))) toast('BURNED. STAY OUT OF THE FLAMES.'); } } else P.burnT = 0;
+  // smoke rolls off the fire and hides you from the guards
+  B.smokeT -= dt; if (B.smokeT <= 0 && B.on.size) { B.smokeT = 1.6; if (G.smoke.filter(s => s.fire).length < 6) { const keys = [...B.on.keys()], c = keys[ri(0, keys.length - 1)]; G.smoke.push({ x: (c % W + 0.5) * CELL, y: ((c / W | 0) + 0.5) * CELL, r: 3, t: 0, life: 6, seed: Math.random() * 99, fire: 1 }); } }
+  if (B.on.size && Math.random() < dt * 3) sfx('burn', P.x + rr(-60, 60), P.y + rr(-60, 60));
+}
+// ---------- security cameras ----------
+function camTick(dt) {
+  const P = G.player;
+  for (const c of G.cams) {
+    if (c.dead) continue; c.t += dt; c.cd -= dt;
+    const d = Math.hypot(P.x - c.x, P.y - c.y), toP = Math.atan2(P.y - c.y, P.x - c.x);
+    const seen = !P.dead && !G.god && d < 150 && Math.abs(angDiff(toP, c.a)) < 0.42 && los(c.x, c.y, P.x, P.y) && !smokeBlocks(c.x, c.y, P.x, P.y);
+    if (seen) { c.see += dt; c.a = turn(c.a, toP, dt * 3); } else { c.see = Math.max(0, c.see - dt * 0.6); c.a = turn(c.a, c.a0 + Math.sin(c.t * 0.7) * c.sw, dt * 1.5); }
+    if (c.see > 0.6 && c.cd <= 0) { c.cd = 9; c.see = 0; sfx('alarm'); banner('CAMERA ALARM', '#ff3b4e'); makeNoise(P.x, P.y, 9999); if (M.b.sps.length) spawnWave([['grd', 'smg'], ['grd', 'pistol']]); }
+    // shot or smashed
+    if (!c.dead && P.meleeT > 0 && d < 30 && Math.abs(angDiff(toP + Math.PI, P.a)) < 1.2) camBreak(c, true);
+  }
+}
+// a bullet's path this frame (checked before it's removed, so shots that end in the wall behind still count)
+function bulletHang(b) {
+  if (b.hung) return;
+  for (const c of G.cams) if (!c.dead && segDist(c.x, c.y, b.px, b.py, b.x, b.y)[0] < 5) { b.rem = b.hung = true; camBreak(c, b.owner !== 'e'); return; }
+  for (const c of G.chands) if (c.st === 'hang' && segDist(c.x, c.y, b.px, b.py, b.x, b.y)[0] < 7) { b.rem = b.hung = true; c.st = 'fall'; c.t = 0; c.byP = b.owner !== 'e'; sfx('clunk', c.x, c.y); for (let i = 0; i < 6; i++) part(c.x, c.y, rr(-60, 60), rr(-60, 60), 0.3, '#ffe14d', 1); return; }
+}
+function camBreak(c, byP) { c.dead = true; sfx('glass', c.x, c.y); for (let i = 0; i < 12; i++) part(c.x, c.y, rr(-120, 120), rr(-120, 120), rr(0.2, 0.4), pick(['#ffe14d', '#fff', '#8a8f99']), 1, 1); if (byP) addScore(100, c.x, c.y, 'CAMERA', null); }
+// ---------- chandeliers: shoot one down onto whoever is under it ----------
+function chandTick(dt) {
+  for (const c of G.chands) {
+    if (c.st === 'fall') { c.t += dt; if (c.t >= 0.4) chandCrash(c); }
+  }
+}
+function chandCrash(c) {
+  c.st = 'down'; sfx('glass', c.x, c.y); sfx('thud', c.x, c.y); G.shake = Math.max(G.shake, 0.5); dRot(M.decX, GFX.chandWreck, c.x, c.y, c.ph);
+  for (let i = 0; i < 30; i++) part(c.x, c.y, rr(-200, 200), rr(-200, 200), rr(0.2, 0.5), pick(['#9ee8ff', '#fff', '#d8a830', '#bff4ff']), ri(1, 2), 1);
+  let n = 0; for (const e of G.ents) { if (e.st === 'dead' || e.st === 'freed' || Math.hypot(e.x - c.x, e.y - c.y) > 18) continue; if (ETYPE[e.t].boss) { e.hp -= 6; e.hitT = 0.2; if (e.hp <= 0) killE(e, 'hit', rr(0, 6.28), c.byP, 'chandelier'); } else { killE(e, 'hit', Math.atan2(e.y - c.y, e.x - c.x), c.byP, 'chandelier'); n++; } }
+  if (n && c.byP) addScore(400 * n, c.x, c.y - 12, n > 1 ? 'CHANDELIER x' + n : 'CHANDELIER', null);
+  const P = G.player; if (!P.dead && Math.hypot(P.x - c.x, P.y - c.y) < 12) hurtPlayer(null, Math.atan2(P.y - c.y, P.x - c.x));
+}
+// ---------- The Host ----------
+function hostTick(dt) {
+  for (const e of G.ents) { if (e.t !== 'hst' || e.st === 'dead') continue;
+    if (!e.phase2 && e.hp <= 9) { e.phase2 = true; banner('THE HOST CALLS HIS CLEANERS', '#ff3b4e'); sfx('alarm'); G.smoke.push({ x: e.x, y: e.y, r: 5, t: 0, life: 6, seed: Math.random() * 99 }); spawnWave([['cln', 'smg'], ['cln', 'smart'], ['cln', 'pistol']]); e.wpn = e.w0 = 'ar'; toast('HE SWITCHED TO A RIFLE. KEEP MOVING.'); } }
+}
+function act2bUpdate(dt) { if (!G.cams) return; camTick(dt); chandTick(dt); blazeTick(dt); hostTick(dt); }
+// ---------- drawing ----------
+function drawAct2bLow(x) {
+  if (!G.cams) return;
+  for (const c of G.cams) { if (c.dead) { dRot(x, GFX.camBody, c.x, c.y, c.a); continue; }
+    if (!inView(c.x, c.y, 160)) continue; const pts = [[c.x, c.y]]; for (let i = 0; i <= 12; i++) { const a = c.a - 0.42 + i * 0.07; let L = 0; while (L < 150 && !blockAt(c.x + Math.cos(a) * L, c.y + Math.sin(a) * L)) L += 5; pts.push([c.x + Math.cos(a) * L, c.y + Math.sin(a) * L]); }
+    const hot = c.see > 0 || c.cd > 7; x.fillStyle = hot ? `rgba(255,59,78,${0.16 + 0.1 * Math.sin(G.time * 20)})` : 'rgba(255,225,77,0.09)'; x.beginPath(); x.moveTo(pts[0][0], pts[0][1]); for (const p of pts) x.lineTo(p[0], p[1]); x.closePath(); x.fill();
+    dRot(x, GFX.camBody, c.x, c.y, c.a); if ((G.time * 2 | 0) % 2) { x.fillStyle = hot ? '#ff3b4e' : '#5dff9a'; x.fillRect(c.x - 0.5, c.y - 3, 1, 1); } }
+  if (G.blaze) { const W = M.W, k = (G.time * 10 | 0); x.globalCompositeOperation = 'lighter'; for (const [c] of G.blaze.on) { const X = (c % W) * CELL + 4, Y = ((c / W) | 0) * CELL + 4; if (!inView(X, Y, 20)) continue; x.fillStyle = 'rgba(255,110,30,0.10)'; x.fillRect(X - 9, Y - 9, 18, 18); } x.globalCompositeOperation = 'source-over';
+    for (const [c, t] of G.blaze.on) { const X = (c % W) * CELL + 4, Y = ((c / W) | 0) * CELL + 4; if (!inView(X, Y, 20)) continue; dRot(x, GFX.flame[(k + c) % 3], X, Y - 2, 0); } }
+}
+function drawAct2bHigh(x) {
+  if (!G.chands) return;
+  for (const c of G.chands) { if (c.st === 'down' || !inView(c.x, c.y, 40)) continue; const k = c.st === 'fall' ? c.t / 0.4 : 0, s = 1.35 - k * 0.35, sway = Math.sin(G.time * 0.9 + c.ph) * 0.06;
+    x.fillStyle = `rgba(0,0,0,${0.18 + k * 0.25})`; x.beginPath(); x.ellipse(c.x + 4 * (1 - k), c.y + 6 * (1 - k), 9 * (0.7 + k * 0.3), 7 * (0.7 + k * 0.3), 0, 0, 6.29); x.fill();
+    x.save(); x.translate(c.x, c.y); x.scale(s, s); dRot(x, GFX.chand, 0, 0, c.ph + sway); x.restore();
+    if (c.st === 'hang') { x.globalCompositeOperation = 'lighter'; x.fillStyle = 'rgba(255,230,160,0.06)'; x.beginPath(); x.arc(c.x, c.y, 34, 0, 6.29); x.fill(); x.globalCompositeOperation = 'source-over'; } }
+}
+
 // ---------- destruction: windows, explosive barrels, fire extinguishers, fish tanks, weak walls, doors off hinges, sparking machines, bloody footprints ----------
 Object.assign(SFX, {
   glass: (t, v) => { for (let i = 0; i < 7; i++) tone(t + i * 0.018, 0.14, 'triangle', 2600 + Math.random() * 2600, 1600, 0.07 * v); nz(t, 0.35, 'highpass', 5200, 3000, 1, 0.55 * v); },
@@ -3157,7 +3391,7 @@ function destInit() {
   SEED = 7000 + G.li * 31 + G.fi * 7;
   // what kind of place is this floor?
   let ind = 0, tot = 0; for (let i = 0; i < N; i++) if (M.fl[i] && !M.wall[i]) { tot++; if (INDUSTRIAL.includes(FL_IDS[M.fl[i] - 1])) ind++; }
-  const gala = /GALA/.test(LEVELS[G.li].name), industrial = ind / Math.max(1, tot) > 0.3 && !gala, outdoors = ['sand', 'rock'].some(k => countFl(k) > tot * 0.3);
+  const gala = /GALA|MANSION|HOST/.test(LEVELS[G.li].name), industrial = ind / Math.max(1, tot) > 0.3 && !gala, outdoors = ['sand', 'rock'].some(k => countFl(k) > tot * 0.3);
   // cells we must keep clear: doors, exit, spawn, captives, enemies, items, switches, zones
   const busy = new Uint8Array(N), mark = (x, y, r) => { for (let j = -r; j <= r; j++) for (let i = -r; i <= r; i++) { const X = x + i, Y = y + j; if (X >= 0 && Y >= 0 && X < W && Y < H) busy[Y * W + X] = 1; } };
   for (const d of b.doors) { mark(d.x, d.y, 2); mark(d.x + (d.o === 'h' ? 1 : 0), d.y + (d.o === 'v' ? 1 : 0), 2); }
@@ -3269,7 +3503,7 @@ const smokeK = s => Math.min(1, s.t * 3, (s.life - s.t) / 1.8);
 // ---------- per frame ----------
 function destUpdate(dt) {
   for (const d of G.dest) if (d.k === 'barrel' && !d.dead && d.fuse >= 0) { d.fuse -= dt; if (Math.random() < dt * 30) part(d.x + rr(-2, 2), d.y - 3, rr(-30, 30), rr(-60, -20), 0.25, pick(['#ffd040', '#fff', '#ff7a1a']), 1); if (d.fuse <= 0) explodeBarrel(d); }
-  for (const s of G.smoke) { s.t += dt; s.r = Math.min(34, s.r + dt * 60); } G.smoke = G.smoke.filter(s => s.t < s.life);
+  for (const s of G.smoke) { s.t += dt; s.r = Math.min(s.fire ? 20 : 34, s.r + dt * (s.fire ? 25 : 60)); } G.smoke = G.smoke.filter(s => s.t < s.life);
   for (const f of G.fish) { f.t += dt; if (f.t < f.life) { f.hop -= dt; if (f.hop <= 0 && f.z <= 0) { f.hop = rr(0.25, 0.7); f.vz = rr(30, 60); f.vx = rr(-30, 30); f.vy = rr(-30, 30); f.va = rr(-10, 10); } } f.vz -= 220 * dt; f.z = Math.max(0, f.z + f.vz * dt); if (f.z <= 0) { f.vx *= 0.8; f.vy *= 0.8; f.vz = Math.max(0, f.vz); f.va = 0; } const nx = f.x + f.vx * dt, ny = f.y + f.vy * dt; if (!solidAt(nx, ny)) { f.x = nx; f.y = ny; } f.a += (f.va || 0) * dt; }
   fireTick(dt); for (const f of G.dfx) f.t += dt; G.dfx = G.dfx.filter(f => f.t < f.life);
   // bloody footprints
@@ -3286,7 +3520,7 @@ function drawDest(x) {
   for (const f of G.dfx) if (f.k === 'fire') { const k = 1 - f.t / f.life; for (let i = 0; i < 6; i++) { const a = G.time * 3 + i * 1.7, r = 3 + Math.sin(G.time * 9 + i) * 1.2; x.fillStyle = `rgba(255,${120 + i * 15},40,${0.7 * k})`; x.beginPath(); x.ellipse(f.x + Math.cos(a) * 3, f.y + Math.sin(a) * 2 - 1, r * k + 0.5, (r + 1) * k + 0.5, 0, 0, 6.29); x.fill(); } x.fillStyle = `rgba(255,240,180,${0.8 * k})`; x.fillRect(f.x - 1, f.y - 2, 2, 2); }
 }
 function drawSmoke(x) {
-  for (const s of G.smoke) { const k = smokeK(s); for (let i = 0; i < 9; i++) { const a = s.seed + i * 0.7 + G.time * 0.12, d = s.r * (i ? 0.55 : 0), r = s.r * (i ? 0.55 : 0.7) + Math.sin(G.time * 0.8 + i) * 1.5; x.fillStyle = `rgba(${i % 2 ? 236 : 214},${i % 2 ? 240 : 222},${i % 2 ? 242 : 228},${0.62 * k})`; x.beginPath(); x.arc(s.x + Math.cos(a) * d, s.y + Math.sin(a) * d, Math.max(1, r), 0, 6.29); x.fill(); } }
+  for (const s of G.smoke) { const k = smokeK(s); for (let i = 0; i < 9; i++) { const a = s.seed + i * 0.7 + G.time * 0.12, d = s.r * (i ? 0.55 : 0), r = s.r * (i ? 0.55 : 0.7) + Math.sin(G.time * 0.8 + i) * 1.5; x.fillStyle = s.fire ? `rgba(${i % 2 ? 70 : 52},${i % 2 ? 64 : 50},${i % 2 ? 66 : 54},${0.55 * k})` : `rgba(${i % 2 ? 236 : 214},${i % 2 ? 240 : 222},${i % 2 ? 242 : 228},${0.62 * k})`; x.beginPath(); x.arc(s.x + Math.cos(a) * d, s.y + Math.sin(a) * d, Math.max(1, r), 0, 6.29); x.fill(); } }
 }
 
 // ---------- rendering ----------
@@ -3436,13 +3670,13 @@ function drawWorld() {
   drawMech(x); if (M.b.restrict && M.b.restrict.length) drawDisguise(x); if (G.birds && G.birds.length) drawBirds(x); drawGuests(x);
   for (const it of G.items) { if (!inView(it.x, it.y)) continue; const b = 1 + Math.sin(G.time * 5 + it.a) * 0.5; x.globalAlpha = 0.5; dRot(x, GFX.wpn[it.k], it.x + 1, it.y + 1, it.a); x.globalAlpha = 1; dRot(x, GFX.wpn[it.k], it.x, it.y - b * 0, it.a); }
   for (const c of G.corpses) if (inView(c.x, c.y)) dRot(x, c.spr, c.x, c.y, c.a);
-  drawDest(x); drawHeist(x);
+  drawDest(x); drawHeist(x); drawAct2bLow(x);
   for (const e of G.ents) if (e.st === 'down' || e.st === 'freed') { const mo = P.mount === e, sit = e.st === 'freed' || (!e.crawl && e.downT < 0.4 && !mo), f = sit ? 3 : Math.floor((G.time + e.legT) * (mo ? 11 : 6)) % 3, j = e.hitT > 0 ? 1.2 : 0; dRot(x, GFX.ch[e.t].downF[f], e.x + rr(-j, j), e.y + rr(-j, j), e.a); if (e.bloody) { const hx = e.x + Math.cos(e.a) * 12, hy = e.y + Math.sin(e.a) * 12; x.fillStyle = '#7a0a12'; x.beginPath(); x.arc(hx, hy, 1.5 + e.bloody * 0.9, 0, 6.29); x.fill(); x.fillStyle = '#c0182a'; x.fillRect(Math.round(hx - 1), Math.round(hy - 1), 2, 2); } if (e.st === 'freed') { x.strokeStyle = '#5dff9a'; x.beginPath(); x.arc(e.x, e.y, 9, 0, 6.29); x.stroke(); } }
   for (const c of G.civs) if (!c.gone && c.st === 'run' && c.t0 > -0.01) { const wf = Math.floor(c.t0 * 16) & 7; x.globalAlpha = 1 - Math.min(1, (c.fade || 0) / 0.6); dRot(x, GFX.ch[c.t].legs[wf], c.x, c.y, c.a); dRot(x, bodyFrame(c.t, null, 'walk', wf), c.x, c.y, c.a); x.globalAlpha = 1; }
   for (const c of G.civs) if (!c.gone && c.st !== 'run') { if (c.st === 'held') dRot(x, GFX.ch.nadia.down, c.x, c.y, Math.PI); else { x.globalAlpha = Math.max(0, 1 - (c.t || 0) / 1.5); const wf = Math.floor((c.t || 0) * 14) & 7; dRot(x, GFX.ch.nadia.legs[wf], c.x, c.y - (c.t || 0) * 20, -Math.PI / 2); dRot(x, bodyFrame('nadia', null, 'walk', wf), c.x, c.y - (c.t || 0) * 20, -Math.PI / 2); x.globalAlpha = 1; } }
   for (const e of G.ents) if (e.st !== 'dead' && e.st !== 'down' && e.st !== 'freed' && inView(e.x, e.y)) drawChar(x, e);
   if (!P.dead) { drawGhosts(x); if (P.inv > 0 && (G.time * 20 | 0) % 2) x.globalAlpha = 0.5; else if (G.implant === 'ghost') x.globalAlpha = (G.time * 9 | 0) % 11 === 0 ? 0.45 : 0.9; drawChar(x, P); x.globalAlpha = 1; if (P.dashT > 0 && P.lastImg && G.state === 'play') G.ghosts.push({ x: P.x, y: P.y, a: P.lastAng, img: P.lastImg, t: 0 }); if (G.slowT > 0 && P.lastImg && G.state === 'play' && (G.sandGhost = (G.sandGhost || 0) - 1 / 60) <= 0) { G.sandGhost = 0.05; G.ghosts.push({ x: P.x, y: P.y, a: P.lastAng, img: P.lastImg, lg: P.lastLeg, la: P.lastLa, t: 0, life: 0.7, col: SAND_COL[(G.time * 9 | 0) % 4] }); } }
-  drawCarried(x); drawSmoke(x);
+  drawCarried(x); drawAct2bHigh(x); drawSmoke(x);
   for (const d of M.doors) drawDoor(x, d);
   for (const t of G.thrown) dRot(x, GFX.wpn[t.k], t.x, t.y, t.a);
   drawProjectiles(x); drawFx(x); drawLasers(x); drawAimAids(x);
@@ -3611,7 +3845,7 @@ function act(a) {
     case 'resume': resumeGame(); break;
     case 'restart': resumeGame(); restartFloor(); break;
     case 'quit': toTitle(); break;
-    case 'next': if (LEVELS[UI.li].job) openJobs(); else if (UI.li + 1 < STORY()) openIntro(UI.li + 1); else { showPanel('pEnd'); $('endMsg').textContent = "THE STAFF ARE FREE, AND THE REGISTRY NAMES NAMES:\nCOUNCILLORS, JUDGES, EDITORS - ALL ON TAPE IN SUITE 4.\n\nTHE REST OF ACT 2 IS COMING: OBSERVATION, THE CLEAN ONES,\nMANSION, AND THE HOST."; } break;
+    case 'next': if (LEVELS[UI.li].job) openJobs(); else if (UI.li + 1 < STORY()) openIntro(UI.li + 1); else { showPanel('pEnd'); $('endMsg').textContent = "ACT 2 COMPLETE.\n\nTHE HOST IS DEAD. THE MASTER DRIVE HOLDS EVERY TAPE FROM SUITE 4,\nAND NADIA IS PUTTING IT ON EVERY SCREEN IN PORT OSTRA.\n\nORISON KNOWS YOUR FACE NOW.\nACT 3 IS COMING: THE TOWER."; } break;
   }
 }
 const STORY = () => LEVELS.filter(l => !l.job && !l.hub).length, money = n => '$' + Math.round(n).toLocaleString('en-US');
