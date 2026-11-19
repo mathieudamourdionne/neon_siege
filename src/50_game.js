@@ -27,7 +27,7 @@ function startFloor(fi, carry) {
   for (const s of b.ens) spawnEnemy(s.t, (s.x + 0.5) * CELL, (s.y + 0.5) * CELL, s.w, s.a, s.p);
   for (const it of b.items) G.items.push({ k: it.k, x: (it.x + 0.5) * CELL, y: (it.y + 0.5) * CELL, ammo: WEAPONS[it.k] ? (WEAPONS[it.k].ammo || 0) : 2, a: rr(0, 6.28) });
   for (const w of b.wits) G.civs.push({ t: 'nadia', x: (w.x + 0.5) * CELL, y: (w.y + 0.5) * CELL, a: Math.PI, st: 'held', wit: 1 });
-  mechInit(def); heistInit(def); act2bInit(def); destInit(); varyFloor(); warmFloor();
+  mechInit(def); heistInit(def); act2bInit(def); act3Init(def); destInit(); varyFloor(); warmFloor();
   G.cam = { x: P.x, y: P.y }; GFX.ch.player = playerSet(G.implant, false); G.hackedE = null;
   G.state = 'play'; banner(def.name, '#ffe14d'); const tok = G.floorTok = (G.floorTok || 0) + 1; if (def.tip) setTimeout(() => { if (G.state === 'play' && G.floorTok === tok) toast(def.tip); }, 1800);
   musicStart(LEVELS[G.li].music);
@@ -508,7 +508,7 @@ function updBullets(dt) {
       if (tg) { const na = turn(a, Math.atan2(tg.y - b.y, tg.x - b.x), b.smart * dt); b.vx = Math.cos(na) * sp; b.vy = Math.sin(na) * sp; }
       (b.trail = b.trail || []).push([b.x, b.y]); if (b.trail.length > 8) b.trail.shift();
     }
-    bulletMove(b, b.vx * dt * sl, b.vy * dt * sl); if (b.t > 1) b.rem = true; if (G.cams && (G.cams.length || G.chands.length)) bulletHang(b);
+    bulletMove(b, b.vx * dt * sl, b.vy * dt * sl); if (b.t > 1) b.rem = true; if (G.cams && (G.cams.length || G.chands.length || G.drones.length || G.turrets.length)) bulletHang(b);
   }
   G.bullets = G.bullets.filter(b => !b.rem);
   for (const t of G.thrown) {
@@ -546,7 +546,7 @@ function updateGame(dt) {
   if (G.player.lock && (G.player.lock.st === 'dead' || G.player.lock.st === 'down')) G.player.lock = null;
   for (const p of G.pops) p.t += dt; G.pops = G.pops.filter(p => p.t < 1.3);
   for (const c of G.civs) if (c.st === 'free') { c.t = (c.t || 0) + dt; if (c.t > 1.5) c.gone = true; } else if (c.st === 'run') civRun(c, dt);
-  mechUpdate(edt); heistUpdate(edt); act2bUpdate(edt); if (G.birds.length) updBirds(dt); if (G.storm) updStorm(dt); if (G.disguise) updDisguise(dt); updGuests(dt);
+  mechUpdate(edt); heistUpdate(edt); act2bUpdate(edt); act3Update(edt); if (G.birds.length) updBirds(dt); if (G.storm) updStorm(dt); if (G.disguise) updDisguise(dt); updGuests(dt);
   G.shake = Math.max(0, G.shake - dt * 2.5); G.flash = Math.max(0, G.flash - dt * 2); G.muzzle = Math.max(0, (G.muzzle || 0) - dt);
   if (G.banner) { G.banner.life -= dt; if (G.banner.life <= 0) G.banner = null; } if (G.toast) { G.toast.life -= dt; if (G.toast.life <= 0) G.toast = null; } if (G.lore) { G.lore.life -= dt; if (G.lore.life <= 0) G.lore = null; }
 }

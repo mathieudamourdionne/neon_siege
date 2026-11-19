@@ -145,13 +145,13 @@ function drawWorld() {
   drawMech(x); if (M.b.restrict && M.b.restrict.length) drawDisguise(x); if (G.birds && G.birds.length) drawBirds(x); drawGuests(x);
   for (const it of G.items) { if (!inView(it.x, it.y)) continue; const b = 1 + Math.sin(G.time * 5 + it.a) * 0.5; x.globalAlpha = 0.5; dRot(x, GFX.wpn[it.k], it.x + 1, it.y + 1, it.a); x.globalAlpha = 1; dRot(x, GFX.wpn[it.k], it.x, it.y - b * 0, it.a); }
   for (const c of G.corpses) if (inView(c.x, c.y)) dRot(x, c.spr, c.x, c.y, c.a);
-  drawDest(x); drawHeist(x); drawAct2bLow(x);
+  drawDest(x); drawHeist(x); drawAct2bLow(x); drawAct3Low(x);
   for (const e of G.ents) if (e.st === 'down' || e.st === 'freed') { const mo = P.mount === e, sit = e.st === 'freed' || (!e.crawl && e.downT < 0.4 && !mo), f = sit ? 3 : Math.floor((G.time + e.legT) * (mo ? 11 : 6)) % 3, j = e.hitT > 0 ? 1.2 : 0; dRot(x, GFX.ch[e.t].downF[f], e.x + rr(-j, j), e.y + rr(-j, j), e.a); if (e.bloody) { const hx = e.x + Math.cos(e.a) * 12, hy = e.y + Math.sin(e.a) * 12; x.fillStyle = '#7a0a12'; x.beginPath(); x.arc(hx, hy, 1.5 + e.bloody * 0.9, 0, 6.29); x.fill(); x.fillStyle = '#c0182a'; x.fillRect(Math.round(hx - 1), Math.round(hy - 1), 2, 2); } if (e.st === 'freed') { x.strokeStyle = '#5dff9a'; x.beginPath(); x.arc(e.x, e.y, 9, 0, 6.29); x.stroke(); } }
   for (const c of G.civs) if (!c.gone && c.st === 'run' && c.t0 > -0.01) { const wf = Math.floor(c.t0 * 16) & 7; x.globalAlpha = 1 - Math.min(1, (c.fade || 0) / 0.6); dRot(x, GFX.ch[c.t].legs[wf], c.x, c.y, c.a); dRot(x, bodyFrame(c.t, null, 'walk', wf), c.x, c.y, c.a); x.globalAlpha = 1; }
   for (const c of G.civs) if (!c.gone && c.st !== 'run') { if (c.st === 'held') dRot(x, GFX.ch.nadia.down, c.x, c.y, Math.PI); else { x.globalAlpha = Math.max(0, 1 - (c.t || 0) / 1.5); const wf = Math.floor((c.t || 0) * 14) & 7; dRot(x, GFX.ch.nadia.legs[wf], c.x, c.y - (c.t || 0) * 20, -Math.PI / 2); dRot(x, bodyFrame('nadia', null, 'walk', wf), c.x, c.y - (c.t || 0) * 20, -Math.PI / 2); x.globalAlpha = 1; } }
   for (const e of G.ents) if (e.st !== 'dead' && e.st !== 'down' && e.st !== 'freed' && inView(e.x, e.y)) drawChar(x, e);
   if (!P.dead) { drawGhosts(x); if (P.inv > 0 && (G.time * 20 | 0) % 2) x.globalAlpha = 0.5; else if (G.implant === 'ghost') x.globalAlpha = (G.time * 9 | 0) % 11 === 0 ? 0.45 : 0.9; drawChar(x, P); x.globalAlpha = 1; if (P.dashT > 0 && P.lastImg && G.state === 'play') G.ghosts.push({ x: P.x, y: P.y, a: P.lastAng, img: P.lastImg, t: 0 }); if (G.slowT > 0 && P.lastImg && G.state === 'play' && (G.sandGhost = (G.sandGhost || 0) - 1 / 60) <= 0) { G.sandGhost = 0.05; G.ghosts.push({ x: P.x, y: P.y, a: P.lastAng, img: P.lastImg, lg: P.lastLeg, la: P.lastLa, t: 0, life: 0.7, col: SAND_COL[(G.time * 9 | 0) % 4] }); } }
-  drawCarried(x); drawAct2bHigh(x); drawSmoke(x);
+  drawCarried(x); drawAct2bHigh(x); drawAct3High(x); drawSmoke(x);
   for (const d of M.doors) drawDoor(x, d);
   for (const t of G.thrown) dRot(x, GFX.wpn[t.k], t.x, t.y, t.a);
   drawProjectiles(x); drawFx(x); drawLasers(x); drawAimAids(x);

@@ -56,7 +56,7 @@ function camTick(dt) {
 }
 // a bullet's path this frame (checked before it's removed, so shots that end in the wall behind still count)
 function bulletHang(b) {
-  if (b.hung) return;
+  if (b.hung || act3Bullet(b)) return;
   for (const c of G.cams) if (!c.dead && segDist(c.x, c.y, b.px, b.py, b.x, b.y)[0] < 5) { b.rem = b.hung = true; camBreak(c, b.owner !== 'e'); return; }
   for (const c of G.chands) if (c.st === 'hang' && segDist(c.x, c.y, b.px, b.py, b.x, b.y)[0] < 7) { b.rem = b.hung = true; c.st = 'fall'; c.t = 0; c.byP = b.owner !== 'e'; sfx('clunk', c.x, c.y); for (let i = 0; i < 6; i++) part(c.x, c.y, rr(-60, 60), rr(-60, 60), 0.3, '#ffe14d', 1); return; }
 }

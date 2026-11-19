@@ -23,7 +23,7 @@ function explode(x, y, R, byP, src) {
   const P = G.player, dp = Math.hypot(P.x - x, P.y - y); if (!P.dead && dp < R * 0.9 && los(x, y, P.x, P.y)) hurtPlayer(null, Math.atan2(P.y - y, P.x - x));
   for (const p of G.props) if (!p.dead && Math.hypot((p.x + p.w / 2) * CELL - x, (p.y + p.h / 2) * CELL - y) < R + 8) damageProp(p, 99, x, y);
   for (const dr of M.doors) { const s = doorEnds(dr), [dd] = segDist(x, y, s[0], s[1], s[2], s[3]); if (dd < R * 1.2) dr.w = (dr.ang >= 0 ? 1 : -1) * 14; }
-  destExplode(x, y, R, byP);
+  destExplode(x, y, R, byP); act3Explode(x, y, R);
   makeNoise(x, y, 520);
 }
 function empBlast(x, y, R) {
