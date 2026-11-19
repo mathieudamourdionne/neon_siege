@@ -1870,6 +1870,79 @@ LEVELS.push(
   }
 );
 
+// ---------- ACT 4: THE BOARD - The Crown, Panic Protocol, The Board ----------
+LEVELS.push(
+  {
+    name: 'THE CROWN', sub: 'ACT 4 - EXECUTIVE FLOORS 90 TO 99', par: 260, music: 10, bgHue: 45, act: 4,
+    msg: { who: 'ACT 4: THE BOARD  //  NADIA REN', text: "HALE'S TABLET WAS RIGHT. THE BOARD MEETS ON FLOOR 100 TONIGHT - ALL OF THEM.\nTHE EXECUTIVE FLOORS ARE GUARDED BY ORISON'S BEST.\n\nLASER GRIDS CUT THE HALLS. THEY BLINK ON AND OFF - TIME YOUR RUN.\nOR FIND THE PANEL IN THE SECURITY ROOM AND KILL THE GRID." },
+    floors: [
+      { name: 'EXECUTIVE HALL', w: 64, h: 40, wall: ['#5a4a2a', '#e8d8a8'], tip: 'WATCH THE LASERS FLICKER BEFORE THEY FIRE UP. THEY CUT GUARDS TOO.',
+        onUse(s) { if (s.kind === 'breaker') { G.lasersOff = true; banner('LASER GRID OFFLINE', '#5dff9a'); sfx('power'); } },
+        build(b) {
+          b.r(2, 17, 6, 6, 'lift').st(4, 19, 'r').r(9, 16, 46, 8, 'marble').d(8, 19, 'v', 0, 'marble');
+          b.laser(18, 16, 18, 23, 2, 1.6, 0).laser(30, 16, 30, 23, 1.6, 1.6, 1.2).laser(42, 16, 42, 23, 2.2, 1.4, 0.6);
+          b.o('plant', 9, 16).o('plant', 54, 23).o('statue', 24, 19).o('statue', 36, 20).o('statue', 48, 19);
+          b.r(9, 3, 14, 12, 'carpet').d(15, 15, 'h').o('desk', 12, 5).o('shelf', 17, 3).o('sofa', 11, 12).o('plant', 22, 3);
+          b.r(24, 3, 14, 12, 'wood').d(30, 15, 'h').o('ltable', 26, 6).o('bar', 31, 3).o('plant', 37, 14);
+          b.r(39, 3, 16, 12, 'carpet').d(46, 15, 'h').o('desk', 44, 5).o('tvwall', 49, 3).o('sofa', 41, 12).o('tank', 50, 9);
+          b.t(52, 6, "BOARD AGENDA - FLOOR 100\n1. THE LEAK. 2. CONTAINMENT. 3. THE CITY.\nATTENDANCE MANDATORY. THE CHAIR PRESIDING.", 'AGENDA');
+          b.r(9, 25, 22, 12, 'carpet').d(19, 24, 'h').laser(9, 30, 30, 30, 1.8, 1.8, 0.3).o('sofa', 11, 27).o('sofa', 11, 34).o('piano', 24, 33).o('table', 16, 33);
+          b.r(32, 25, 23, 12, 'tile').d(43, 24, 'h').sw(52, 26, 'breaker', 'LASER GRID').o('desk', 35, 27).o('tvwall', 38, 25).o('locker', 54, 31).o('locker', 54, 34);
+          b.r(56, 16, 6, 8, 'lift').d(55, 19, 'v', 0, 'lift').ex(57, 17, 4, 6, 'THE CORE');
+          b.e('cln', 24, 21, 'smart', 'l').e('grd', 36, 17, 'pistol', 'l').e('rio', 47, 21, 'pistol', 'l');
+          b.e('grd', 13, 9, 'pistol', 'r').e('cln', 20, 12, 'smg', 'l').e('grd', 28, 9, 'machete', 'r').e('fat', 35, 11, 'pump', 'l').e('cln', 45, 8, 'smart', 'd').e('grd', 52, 13, 'pistol', 'l');
+          b.e('grd', 14, 28, 'bat', 'r').e('cln', 26, 27, 'pistol', 'l').e('grd', 36, 32, 'smg', 'r').e('brc', 47, 29, 'pump', 'l').e('hnd', 40, 35, null, 'l');
+          b.i('silp', 5, 21);
+          b.sp(58, 21).sp(10, 36).sp(53, 3);
+        } }
+    ]
+  },
+  {
+    name: 'PANIC PROTOCOL', sub: 'ACT 4 - THE CORE FLOORS', par: 240, music: 7, bgHue: 110, act: 4,
+    msg: { who: 'NADIA REN // RADIO', text: "YOU TRIPPED THE SPIRE'S PANIC PROTOCOL. THE VENTS ARE PUMPING GAS INTO THE CORE.\nTHE GUARDS HAVE MASKS. YOU DON'T.\n\nCLOSE THE THREE VENT VALVES AND THE GAS STOPS SPREADING.\nA FEW SECONDS IN THE GREEN IS FINE. DON'T STAY THERE." },
+    floors: [
+      { name: 'THE CORE', w: 64, h: 40, wall: ['#2a4a2a', '#a8d8a8'], tip: 'CLOSE THE VENT VALVES (E). STANDING IN THE GAS FOR MORE THAN A SECOND KILLS YOU.',
+        gas: { seeds: [[31, 18], [11, 5], [52, 34], [30, 34], [52, 5]], every: 0.5, chance: 0.2, max: 300, life: 16, expose: 1.1 },
+        objs: [{ k: 'valve', n: 3, label: 'CLOSE THE VENT VALVES' }],
+        on(k, n) { if (k === 'valve' && n >= 3) { G.gasOff = true; banner('GAS SHUT OFF', '#5dff9a'); toast('THE GAS WILL CLEAR IN A FEW SECONDS.'); } },
+        build(b) {
+          b.r(2, 17, 6, 6, 'lift').st(4, 19, 'r').r(9, 3, 46, 5, 'conc').r(9, 32, 46, 5, 'conc').r(9, 8, 5, 24, 'conc').r(50, 8, 5, 24, 'conc').d(8, 19, 'v', 0, 'conc');
+          b.r(20, 14, 24, 12, 'grate').r(14, 19, 6, 2, 'grate').r(44, 19, 6, 2, 'grate').o('tank', 23, 16).o('tank', 38, 16).o('tank', 30, 21).o('pump', 25, 22).o('pump', 36, 22).o('console', 31, 15);
+          b.r(15, 9, 10, 4, 'dark').d(19, 8, 'h').sw(16, 10, 'valve', 'VENT VALVE').o('server', 22, 9);
+          b.r(39, 9, 10, 4, 'dark').d(43, 8, 'h').sw(47, 10, 'valve', 'VENT VALVE').o('server', 40, 9);
+          b.r(15, 27, 10, 4, 'dark').d(19, 31, 'h').sw(16, 29, 'valve', 'VENT VALVE').o('server', 22, 30);
+          b.r(39, 27, 10, 4, 'dark').d(43, 31, 'h').o('shelf', 40, 27).o('crate', 46, 28);
+          b.t(32, 25, "PANIC PROTOCOL: ACTIVE\nAGENT: SEDATIVE GAS (LETHAL AT DOSE)\nSTAFF: MASKS ON. VALVES: MANUAL OVERRIDE ONLY.", 'CORE CONSOLE');
+          b.r(56, 17, 6, 6, 'lift').d(55, 19, 'v', 0, 'lift').ex(57, 18, 4, 4, 'FLOOR 100');
+          b.e('grd', 25, 5, 'pistol', 'r', { p: [[25, 5], [45, 5]] }).e('cln', 11, 14, 'smg', 'd').e('grd', 52, 13, 'pistol', 'd').e('tec', 29, 18, null, 'r');
+          b.e('cln', 35, 24, 'smart', 'l').e('grd', 42, 17, 'pipe', 'l').e('grd', 21, 11, 'pistol', 'r').e('fat', 45, 10, 'pump', 'l');
+          b.e('grd', 20, 29, 'machete', 'r').e('rio', 30, 34, 'pistol', 'u').e('cln', 46, 34, 'smg', 'l').e('grd', 45, 29, 'pistol', 'l').e('hnd', 52, 25, null, 'u');
+          b.i('ar', 47, 29).i('frag', 41, 29);
+          b.sp(58, 21).sp(10, 35).sp(53, 4);
+        } }
+    ]
+  },
+  {
+    name: 'THE BOARD', sub: 'ACT 4 - THE BOARDROOM, FLOOR 100', par: 240, music: 12, bgHue: 0, act: 4,
+    msg: { who: 'NADIA REN // RADIO', text: "FLOOR 100. THE BOARDROOM. THE CHAIR ISN'T RUNNING - HE'S WAITING FOR YOU\nIN A COMBAT SUIT ORISON BUILT FOR THE ARMY AND NEVER SOLD.\n\nRED CIRCLES ON THE FLOOR ARE INCOMING ROCKETS - GET OUT OF THEM.\nBREAK THE SUIT, THEN FINISH HIM. THIS ENDS TONIGHT." },
+    floors: [
+      { name: 'THE BOARDROOM', w: 60, h: 40, wall: ['#3a0a14', '#e8b8b8'], tip: 'THE SUIT TAKES A LOT OF HITS. EXPLOSIVES AND HEAVY WEAPONS HELP. STAY OUT OF THE RED CIRCLES.',
+        build(b) {
+          b.r(26, 35, 8, 4, 'lift').st(30, 37, 'u').r(6, 6, 48, 28, 'carpet').d(29, 34, 'h');
+          for (let x = 20; x <= 38; x += 2) b.o('table', x, 18);
+          b.o('pillar', 12, 12).o('pillar', 46, 12).o('pillar', 12, 26).o('pillar', 46, 26).o('statue', 8, 20).o('statue', 51, 20).o('plant', 6, 6).o('plant', 53, 6).o('plant', 6, 33).o('plant', 53, 33).o('bar', 7, 28).o('tvwall', 38, 6).o('sofa', 20, 29).o('sofa', 37, 29);
+          b.r(26, 2, 8, 3, 'plate').d(29, 5, 'h').ex(27, 2, 6, 3, 'THE BROADCAST');
+          b.e('chr', 30, 11, 'belt', 'd');
+          b.e('brd', 22, 16, 'pistol', 'd').e('brd', 36, 16, null, 'd').e('brd', 22, 21, 'bottle', 'u').e('brd', 36, 21, 'revolver', 'u');
+          b.o('pillar', 18, 9).o('pillar', 40, 9).o('pillar', 18, 30).o('pillar', 40, 30);
+          b.e('cln', 10, 18, 'smg', 'r').e('cln', 49, 22, 'smart', 'l');
+          b.i('rocket', 28, 33).i('frag', 32, 33);
+          b.sp(7, 7).sp(52, 7).sp(7, 32).sp(52, 32);
+        } }
+    ]
+  }
+);
+
 // ---------- JOBS: loud heists, played from the JOBS menu (kept after the story levels so chapter numbers don't move) ----------
 const COPS = { grd: ['grd', 'smg'], grdp: ['grd', 'pistol'], brc: ['brc', 'pump'], rio: ['rio', 'pistol'], fat: ['fat', 'pump'], hnd: ['hnd', null], cln: ['cln', 'smg'] };
 const W_ = (...k) => k.map(q => COPS[q]);
@@ -2163,7 +2236,7 @@ function startFloor(fi, carry) {
   for (const s of b.ens) spawnEnemy(s.t, (s.x + 0.5) * CELL, (s.y + 0.5) * CELL, s.w, s.a, s.p);
   for (const it of b.items) G.items.push({ k: it.k, x: (it.x + 0.5) * CELL, y: (it.y + 0.5) * CELL, ammo: WEAPONS[it.k] ? (WEAPONS[it.k].ammo || 0) : 2, a: rr(0, 6.28) });
   for (const w of b.wits) G.civs.push({ t: 'nadia', x: (w.x + 0.5) * CELL, y: (w.y + 0.5) * CELL, a: Math.PI, st: 'held', wit: 1 });
-  mechInit(def); heistInit(def); act2bInit(def); act3Init(def); destInit(); varyFloor(); warmFloor();
+  mechInit(def); heistInit(def); act2bInit(def); act3Init(def); act4Init(def); destInit(); varyFloor(); warmFloor();
   G.cam = { x: P.x, y: P.y }; GFX.ch.player = playerSet(G.implant, false); G.hackedE = null;
   G.state = 'play'; banner(def.name, '#ffe14d'); const tok = G.floorTok = (G.floorTok || 0) + 1; if (def.tip) setTimeout(() => { if (G.state === 'play' && G.floorTok === tok) toast(def.tip); }, 1800);
   musicStart(LEVELS[G.li].music);
@@ -2320,7 +2393,7 @@ function killE(e, how, ang, byP, method) {
   goreKill(e, how, ang, method); sfx(how === 'shot' || how === 'shotgun' ? 'gib' : 'splat', e.x, e.y); G.shake = Math.max(G.shake, how === 'shotgun' || how === 'exec' ? 0.6 : 0.35);
   if (byP) { G.hitStop = Math.max(G.hitStop, how === 'shotgun' || how === 'exec' ? 0.06 : 0.035); G.zp = Math.max(G.zp, how === 'exec' ? 0.09 : 0.05); }
   if (G.player.lock === e) G.player.lock = null;
-  if (ETYPE[e.t].boss) { banner(e.t === 'hdl' ? 'THE HANDLER IS DOWN' : e.t === 'hst' ? 'THE HOST IS DOWN' : G.ents.some(o => o !== e && ETYPE[o.t].boss && o.st !== 'dead') ? 'ONE TWIN DOWN' : 'BOTH TWINS DOWN', '#ffe14d'); G.hitStop = 0.15; }
+  if (ETYPE[e.t].boss) { banner(e.t === 'hdl' ? 'THE HANDLER IS DOWN' : e.t === 'hst' ? 'THE HOST IS DOWN' : e.t === 'chr' || e.t === 'chr2' ? 'THE CHAIR IS DOWN' : e.t === 'dir' ? 'HALE IS DOWN' : G.ents.some(o => o !== e && ETYPE[o.t].boss && o.st !== 'dead') ? 'ONE TWIN DOWN' : 'BOTH TWINS DOWN', '#ffe14d'); G.hitStop = 0.15; }
   if (byP && method !== 'puppet' && how !== 'burn') coverCheck(e);
   if (byP) { G.stats.kills++; if (how === 'exec') G.stats.execs++; if (!e.everSaw) G.stats.unseen = (G.stats.unseen || 0) + 1; if (how === 'shotgun' || how === 'cut' || how === 'exec') G.stats.brutal = (G.stats.brutal || 0) + 1; addScore(how === 'exec' ? 700 : 400, e.x, e.y, how === 'burn' ? 'BURNOUT' : method === 'puppet' ? 'PUPPET' : method === 'rail' ? 'RAILED' : method === 'rocket' || method === 'frag' || method === 'barrel' ? 'BOOM' : method === 'bleed' ? 'BLED OUT' : method === 'emp' ? 'FRIED' : method === 'knife' ? 'KNIFED' : method === 'blades' ? 'SLICED' : how === 'exec' ? 'FINISHER' : how === 'throw' ? 'THROWN' : '', method);  }
   checkClear();
@@ -2682,7 +2755,7 @@ function updateGame(dt) {
   if (G.player.lock && (G.player.lock.st === 'dead' || G.player.lock.st === 'down')) G.player.lock = null;
   for (const p of G.pops) p.t += dt; G.pops = G.pops.filter(p => p.t < 1.3);
   for (const c of G.civs) if (c.st === 'free') { c.t = (c.t || 0) + dt; if (c.t > 1.5) c.gone = true; } else if (c.st === 'run') civRun(c, dt);
-  mechUpdate(edt); heistUpdate(edt); act2bUpdate(edt); act3Update(edt); if (G.birds.length) updBirds(dt); if (G.storm) updStorm(dt); if (G.disguise) updDisguise(dt); updGuests(dt);
+  mechUpdate(edt); heistUpdate(edt); act2bUpdate(edt); act3Update(edt); act4Update(edt); if (G.birds.length) updBirds(dt); if (G.storm) updStorm(dt); if (G.disguise) updDisguise(dt); updGuests(dt);
   G.shake = Math.max(0, G.shake - dt * 2.5); G.flash = Math.max(0, G.flash - dt * 2); G.muzzle = Math.max(0, (G.muzzle || 0) - dt);
   if (G.banner) { G.banner.life -= dt; if (G.banner.life <= 0) G.banner = null; } if (G.toast) { G.toast.life -= dt; if (G.toast.life <= 0) G.toast = null; } if (G.lore) { G.lore.life -= dt; if (G.lore.life <= 0) G.lore = null; }
 }
@@ -3383,7 +3456,7 @@ function act2bGfx() {
 function act2bInit(def) {
   const b = M.b; G.cams = (b.cams || []).map(c => ({ x: (c.x + 0.5) * CELL, y: (c.y + 0.5) * CELL, a0: c.a, sw: c.sw, a: c.a, t: Math.random() * 6, see: 0, cd: 0, dead: false }));
   G.chands = (b.chands || []).map(c => ({ x: (c.x + 0.5) * CELL, y: (c.y + 0.5) * CELL, st: 'hang', t: 0, ph: Math.random() * 6 }));
-  G.blaze = null; if (def.blaze) { G.blaze = { on: new Map(), out: new Float32Array(M.W * M.H), tick: 0, smokeT: 0 }; for (const [x, y] of def.blaze.seeds) blazeLight(y * M.W + x); }
+  G.blaze = null; const bz = def.blaze || def.gas; if (bz) { G.blaze = { on: new Map(), out: new Float32Array(M.W * M.H), tick: 0, smokeT: 0, gas: !!def.gas }; for (const [x, y] of bz.seeds) blazeLight(y * M.W + x); }
   if (G.cams.length || G.chands.length || G.blaze) act2bGfx();
   G.player.burnT = 0;
 }
@@ -3391,13 +3464,14 @@ function act2bInit(def) {
 function blazeOk(c) { return c >= 0 && c < M.W * M.H && M.fl[c] && !M.wall[c] && !(M.solid[c] && M.tall[c]); }
 function blazeLight(c) { const B = G.blaze; if (!B || B.on.has(c) || !blazeOk(c) || B.out[c] > G.levelTime) return; B.on.set(c, 0); }
 function blazeTick(dt) {
-  const B = G.blaze, def = floorDef(); if (!B) return; const W = M.W, life = def.blaze.life || 14, P = G.player;
-  B.tick -= dt; if (B.tick <= 0) { B.tick = def.blaze.every || 0.5; const add = [];
-    for (const [c, t] of B.on) { if (Math.random() < (def.blaze.chance || 0.2) && B.on.size + add.length < (def.blaze.max || 220)) { const n = c + pick([1, -1, W, -W]); if (blazeOk(n) && !B.on.has(n) && !(B.out[n] > G.levelTime)) add.push(n); } }
+  const B = G.blaze, def = floorDef(); if (!B) return; const cfg = def.blaze || def.gas, W = M.W, life = cfg.life || 14, P = G.player;
+  B.tick -= dt; if (B.tick <= 0) { B.tick = cfg.every || 0.5; const add = [];
+    for (const [c, t] of B.on) { if (!(B.gas && G.gasOff) && Math.random() < (cfg.chance || 0.2) && B.on.size + add.length < (cfg.max || 220)) { const n = c + pick([1, -1, W, -W]); if (blazeOk(n) && !B.on.has(n) && !(B.out[n] > G.levelTime)) add.push(n); } }
     for (const n of add) blazeLight(n); }
-  for (const [c, t] of B.on) { const nt = t + dt; if (nt > life) { B.on.delete(c); B.out[c] = G.levelTime + 40; const d = M.decX; d.fillStyle = 'rgba(14,8,6,0.55)'; d.fillRect((c % W) * CELL, ((c / W) | 0) * CELL, CELL, CELL); } else B.on.set(c, nt); }
+  for (const [c, t] of B.on) { const nt = t + dt; if (nt > life) { B.on.delete(c); B.out[c] = G.levelTime + (B.gas ? 6 : 40); if (B.gas) continue; const d = M.decX; d.fillStyle = 'rgba(14,8,6,0.55)'; d.fillRect((c % W) * CELL, ((c / W) | 0) * CELL, CELL, CELL); } else B.on.set(c, nt); }
   // fire kills whoever stands in it (the cleaners wear fire suits)
   const at = (x, y) => B.on.has(Math.floor(y / CELL) * W + Math.floor(x / CELL));
+  if (B.gas) { if (!P.dead && at(P.x, P.y)) { P.burnT += dt; if (P.burnT > (cfg.expose || 1)) { P.burnT = 0; if (hurtPlayer(null, rr(0, 6.28))) toast('GASSED. CLOSE THE VALVES AND STAY OUT OF THE GREEN.'); } } else P.burnT = Math.max(0, P.burnT - dt * 2); if (B.on.size && Math.random() < dt * 2) sfx('hiss', P.x + rr(-60, 60), P.y + rr(-60, 60)); return; }
   for (const e of G.ents) if (e.st !== 'dead' && e.st !== 'freed' && e.t !== 'cln' && !ETYPE[e.t].boss && at(e.x, e.y)) killE(e, 'shot', rr(0, 6.28), false, 'flare');
   if (!P.dead && at(P.x, P.y) && def.fireHurts) { P.burnT += dt; if (P.burnT > 0.25) { P.burnT = 0; if (hurtPlayer(null, rr(0, 6.28))) toast('BURNED. STAY OUT OF THE FLAMES.'); } } else P.burnT = 0;
   // smoke rolls off the fire and hides you from the guards
@@ -3450,7 +3524,8 @@ function drawAct2bLow(x) {
     if (!inView(c.x, c.y, 160)) continue; const pts = [[c.x, c.y]]; for (let i = 0; i <= 12; i++) { const a = c.a - 0.42 + i * 0.07; let L = 0; while (L < 150 && !blockAt(c.x + Math.cos(a) * L, c.y + Math.sin(a) * L)) L += 5; pts.push([c.x + Math.cos(a) * L, c.y + Math.sin(a) * L]); }
     const hot = c.see > 0 || c.cd > 7; x.fillStyle = hot ? `rgba(255,59,78,${0.16 + 0.1 * Math.sin(G.time * 20)})` : 'rgba(255,225,77,0.09)'; x.beginPath(); x.moveTo(pts[0][0], pts[0][1]); for (const p of pts) x.lineTo(p[0], p[1]); x.closePath(); x.fill();
     dRot(x, GFX.camBody, c.x, c.y, c.a); if ((G.time * 2 | 0) % 2) { x.fillStyle = hot ? '#ff3b4e' : '#5dff9a'; x.fillRect(c.x - 0.5, c.y - 3, 1, 1); } }
-  if (G.blaze) { const W = M.W, k = (G.time * 10 | 0); x.globalCompositeOperation = 'lighter'; for (const [c] of G.blaze.on) { const X = (c % W) * CELL + 4, Y = ((c / W) | 0) * CELL + 4; if (!inView(X, Y, 20)) continue; x.fillStyle = 'rgba(255,110,30,0.10)'; x.fillRect(X - 9, Y - 9, 18, 18); } x.globalCompositeOperation = 'source-over';
+  if (G.blaze && G.blaze.gas) { const W = M.W; for (const [c, t] of G.blaze.on) { const X = (c % W) * CELL + 4, Y = ((c / W) | 0) * CELL + 4; if (!inView(X, Y, 20)) continue; const a = Math.min(1, t * 2) * (t > (floorDef().gas.life || 16) - 2 ? Math.max(0, ((floorDef().gas.life || 16) - t) / 2) : 1); x.fillStyle = `rgba(110,240,80,${0.22 * a})`; x.beginPath(); x.arc(X + Math.sin(G.time + c) * 2, Y + Math.cos(G.time * 0.8 + c) * 2, 7, 0, 6.29); x.fill(); } }
+  else if (G.blaze) { const W = M.W, k = (G.time * 10 | 0); x.globalCompositeOperation = 'lighter'; for (const [c] of G.blaze.on) { const X = (c % W) * CELL + 4, Y = ((c / W) | 0) * CELL + 4; if (!inView(X, Y, 20)) continue; x.fillStyle = 'rgba(255,110,30,0.10)'; x.fillRect(X - 9, Y - 9, 18, 18); } x.globalCompositeOperation = 'source-over';
     for (const [c, t] of G.blaze.on) { const X = (c % W) * CELL + 4, Y = ((c / W) | 0) * CELL + 4; if (!inView(X, Y, 20)) continue; dRot(x, GFX.flame[(k + c) % 3], X, Y - 2, 0); } }
 }
 function drawAct2bHigh(x) {
@@ -3588,6 +3663,83 @@ function drawAct3High(x) {
     x.fillStyle = 'rgba(0,0,0,0.3)'; x.beginPath(); x.ellipse(d.x + 5, d.y + 8, 6, 4, 0, 0, 6.29); x.fill();
     dRot(x, GFX.drone[(G.time * 20 | 0) % 2], d.x, d.y + Math.sin(d.t * 3) * 0.8, d.a); }
 }
+
+// ---------- Act 4 mechanics: laser grids, gas (shares the fire spreader), The Chair and his combat suit ----------
+Object.assign(ETYPE, {
+  brd: { name: 'BOARD MEMBER', spd: 92, pat: 40, react: 0.6 },
+  chr: { name: 'THE CHAIR - COMBAT SUIT', spd: 58, pat: 30, react: 0.35, hp: 30, armor: 1, boss: 1 },
+  chr2: { name: 'THE CHAIR', spd: 112, pat: 40, react: 0.25, hp: 8, armor: 1, boss: 1, strafe: 1 },
+});
+Object.assign(CHARS, {
+  brd: { jacket: '#2a2a3a', boots: '#0a0a0a', skin: SKINS[3], hair: '#6a5a4a', legs: '#1e1e28', stripe: '#c8a040', implant: '#c8a040' },
+  chr: { bar: '#ff3b4e', jacket: '#121216', boots: '#0a0a0a', skin: SKINS[0], hair: '#a8a8ac', legs: '#0e0e12', stripe: '#ff3b4e', implant: '#ff3b4e' },
+});
+CHARS.chr2 = CHARS.chr;
+Object.assign(LOOKS, { brd: { hairStyle: 'slick', collar: '#e8e4dc', tie: '#c8a040' }, chr: { hairStyle: 'slick', collar: '#e8e4dc', tie: '#ff3b4e' } });
+LOOKS.chr2 = LOOKS.chr;
+Object.assign(Builder.prototype, { laser(x1, y1, x2, y2, on, off, ph) { (this.lasers = this.lasers || []).push({ x1: x1, y1: y1, x2: x2, y2: y2, on: on || 2, off: off || 1.6, ph: ph || 0 }); return this; } });
+function act4Gfx() {
+  if (GFX.mech) return;
+  GFX.mech = hdc(spr(72, 64, P => { const C = 36, M = 32;
+    P.r(10, 12, 40, 40, '#140c10'); P.r(12, 14, 36, 36, '#3a3e46'); P.r(12, 14, 36, 4, '#6a6e78'); P.r(12, 46, 36, 4, '#22252c'); for (const y of [22, 30, 38]) P.r(14, y, 32, 1, '#2a2e36');
+    P.r(14, 16, 6, 6, '#ff3b4e'); P.r(14, 42, 6, 6, '#ff3b4e'); P.d(38, M, 10, 10, '#140c10'); P.d(38, M, 9, 9, '#2a5a6a'); P.d(39, M - 2, 5, 4, '#8ad8e8'); P.d(36, M, 4, 4, SKINS[0]); P.d(35, M, 3, 3.6, '#a8a8ac');
+    P.r(30, 2, 26, 10, '#140c10'); P.r(31, 3, 24, 8, '#4a4e58'); for (let i = 0; i < 3; i++) { P.r(52, 3 + i * 3, 18, 2, '#140c10'); P.r(52, 4 + i * 3, 17, 1, '#8a8f99'); } P.r(34, 4, 8, 6, '#2a2e36');
+    P.r(26, 52, 22, 11, '#140c10'); P.r(27, 53, 20, 9, '#4a4e58'); for (let i = 0; i < 3; i++) for (let j = 0; j < 2; j++) { P.d(31 + i * 6, 55 + j * 4, 2, 2, '#140c10'); P.p(31 + i * 6, 55 + j * 4, '#ff7a1a'); }
+    P.r(0, 26, 12, 12, '#140c10'); P.r(1, 27, 10, 10, '#5a5e66'); P.p(3, 29, '#ffd040'); }));
+  GFX.mechFoot = hdc(spr(16, 12, P => { P.r(0, 0, 16, 12, '#140c10'); P.r(1, 1, 14, 10, '#4a4e58'); P.r(1, 1, 14, 2, '#7a7e88'); P.r(11, 3, 4, 6, '#2a2e36'); }));
+  GFX.mechWreck = hdc(spr(72, 64, P => { for (let i = 0; i < 14; i++) { const x = 8 + (i * 23) % 56, y = 8 + (i * 17) % 48; P.r(x, y, 10, 6, '#140c10'); P.r(x + 1, y + 1, 8, 4, i % 3 ? '#3a3e46' : '#5a5e66'); } P.d(36, 32, 12, 10, '#140c10'); P.d(36, 32, 10, 8, '#22252c'); P.p(36, 32, '#ff7a1a'); P.p(30, 28, '#ff7a1a'); }));
+}
+function act4Init(def) {
+  const b = M.b; G.lasers = (b.lasers || []).map(l => ({ ax: (l.x1 + 0.5) * CELL, ay: (l.y1 + 0.5) * CELL, bx: (l.x2 + 0.5) * CELL, by: (l.y2 + 0.5) * CELL, on: l.on, off: l.off, t: l.ph, live: false, warn: false }));
+  G.lasersOff = false; G.gasOff = false; G.strikes = []; if (G.ents.some(e => e.t === 'chr')) act4Gfx();
+}
+// ---------- laser grids ----------
+function laserTick(dt) {
+  if (G.lasersOff) return; const P = G.player;
+  for (const L of G.lasers) { L.t += dt; const cyc = L.on + L.off, m = L.t % cyc, was = L.live; L.live = m < L.on; L.warn = !L.live && m > cyc - 0.45; if (L.live && !was) sfx('zap', (L.ax + L.bx) / 2, (L.ay + L.by) / 2);
+    if (!L.live) continue;
+    if (!P.dead && segDist(P.x, P.y, L.ax, L.ay, L.bx, L.by)[0] < 3.2) { if (hurtPlayer(null, Math.atan2(L.by - L.ay, L.bx - L.ax) + Math.PI / 2)) toast('CUT BY THE LASER GRID. TIME THE GAPS.'); }
+    for (const e of G.ents) if (e.st !== 'dead' && e.st !== 'freed' && !ETYPE[e.t].boss && segDist(e.x, e.y, L.ax, L.ay, L.bx, L.by)[0] < 3.2) killE(e, 'cut', Math.atan2(L.by - L.ay, L.bx - L.ax) + Math.PI / 2, false, 'laser'); }
+}
+// ---------- The Chair ----------
+function chairTick(dt) {
+  const P = G.player;
+  for (const e of G.ents) { if (e.st === 'dead') continue;
+    if (e.t === 'chr') {
+      e.stepT = (e.stepT || 0) + Math.hypot(e.vx || 0, e.vy || 0) * dt * 0.08;
+      if (e.st !== 'idle' && e.st !== 'patrol' && !G.player.dead) { e.rockT = (e.rockT === undefined ? 3 : e.rockT) - dt; if (e.rockT <= 0) { e.rockT = 6.5; sfx('charge', e.x, e.y); banner('ROCKETS INCOMING', '#ff3b4e'); for (const [ox, oy] of [[0, 0], [rr(-40, -20), rr(-30, 30)], [rr(20, 40), rr(-30, 30)]]) G.strikes.push({ x: P.x + ox, y: P.y + oy, t: 1.3, T: 1.3 }); } }
+      if (e.hp <= 15) { // the suit gives out and he climbs out of it
+        e.t = 'chr2'; e.hp = ETYPE.chr2.hp; e.wpn = e.w0 = 'smart'; e.r = 6; e.st = 'alert'; e.lx = P.x; e.ly = P.y;
+        sfx('explode', e.x, e.y); G.shake = 1; G.flash = 0.3; dRot(M.decX, GFX.mechWreck, e.x, e.y, e.a); for (let i = 0; i < 40; i++) part(e.x, e.y, rr(-220, 220), rr(-220, 220), rr(0.2, 0.7), pick(['#ff7a1a', '#ffe14d', '#3a3e46', '#8a8f99', '#fff']), ri(1, 3), 1);
+        G.dfx.push({ k: 'fire', x: e.x + 6, y: e.y + 4, t: 0, life: 12 }); banner('THE SUIT IS DOWN - HE\'S CLIMBING OUT', '#ffe14d'); toast('HE\'S FAST NOW. DON\'T LET HIM GET BEHIND THE TABLE.');
+        GFX.ch.chr2 = GFX.ch.chr2 || charSet('chr2');
+      }
+    }
+  }
+  for (const s of G.strikes) { s.t -= dt; if (s.t <= 0 && !s.done) { s.done = true; explode(s.x, s.y, 22, false, 'rocket'); } }
+  G.strikes = G.strikes.filter(s => !s.done);
+}
+function act4Update(dt) { if (!G.lasers) return; laserTick(dt); chairTick(dt); }
+// ---------- drawing ----------
+function drawAct4Low(x) {
+  if (!G.lasers) return;
+  for (const L of G.lasers) {
+    if (!inView((L.ax + L.bx) / 2, (L.ay + L.by) / 2, 200)) continue;
+    for (const [px, py] of [[L.ax, L.ay], [L.bx, L.by]]) { x.fillStyle = '#140c10'; x.fillRect(px - 2.5, py - 2.5, 5, 5); x.fillStyle = G.lasersOff ? '#3a3e46' : L.live ? '#ff3b4e' : '#5a1a20'; x.fillRect(px - 1.5, py - 1.5, 3, 3); }
+    if (G.lasersOff) continue;
+    if (L.live) { x.strokeStyle = 'rgba(255,40,60,0.35)'; x.lineWidth = 3.5; x.beginPath(); x.moveTo(L.ax, L.ay); x.lineTo(L.bx, L.by); x.stroke(); x.strokeStyle = '#ffd0d4'; x.lineWidth = 0.8; x.stroke(); }
+    else { x.strokeStyle = L.warn && (G.time * 16 | 0) % 2 ? 'rgba(255,59,78,0.8)' : 'rgba(255,59,78,0.15)'; x.lineWidth = 0.5; x.setLineDash([2, 3]); x.beginPath(); x.moveTo(L.ax, L.ay); x.lineTo(L.bx, L.by); x.stroke(); x.setLineDash([]); }
+  }
+  for (const s of G.strikes) { const k = 1 - s.t / s.T; x.strokeStyle = `rgba(255,59,78,${0.4 + 0.5 * k})`; x.lineWidth = 1; x.beginPath(); x.arc(s.x, s.y, 22, 0, 6.29); x.stroke(); x.fillStyle = `rgba(255,59,78,${0.08 + 0.2 * k})`; x.beginPath(); x.arc(s.x, s.y, 22 * k, 0, 6.29); x.fill(); x.fillStyle = '#ff3b4e'; x.fillRect(s.x - 3, s.y - 0.5, 6, 1); x.fillRect(s.x - 0.5, s.y - 3, 1, 6); }
+}
+function drawSuit(x, e) {
+  const st = e.stepT || 0, ca = Math.cos(e.a), sa = Math.sin(e.a), px = -sa, py = ca;
+  x.fillStyle = 'rgba(0,0,0,0.35)'; x.beginPath(); x.ellipse(e.x + 4, e.y + 5, 17, 15, 0, 0, 6.29); x.fill();
+  for (const sd of [-1, 1]) { const f = Math.sin(st * 6 + (sd > 0 ? Math.PI : 0)) * 6; dRot(x, GFX.mechFoot, e.x + px * sd * 10 + ca * f, e.y + py * sd * 10 + sa * f, e.a); }
+  dRot(x, GFX.mech, e.x, e.y, e.a);
+  if (e.hitT > 0) { x.globalCompositeOperation = 'lighter'; x.globalAlpha = 0.5; dRot(x, GFX.mech, e.x, e.y, e.a); x.globalAlpha = 1; x.globalCompositeOperation = 'source-over'; }
+}
+function skipCharDraw(e) { return e.t === 'chr'; }
 
 // ---------- destruction: windows, explosive barrels, fire extinguishers, fish tanks, weak walls, doors off hinges, sparking machines, bloody footprints ----------
 Object.assign(SFX, {
@@ -3903,11 +4055,11 @@ function drawWorld() {
   drawMech(x); if (M.b.restrict && M.b.restrict.length) drawDisguise(x); if (G.birds && G.birds.length) drawBirds(x); drawGuests(x);
   for (const it of G.items) { if (!inView(it.x, it.y)) continue; const b = 1 + Math.sin(G.time * 5 + it.a) * 0.5; x.globalAlpha = 0.5; dRot(x, GFX.wpn[it.k], it.x + 1, it.y + 1, it.a); x.globalAlpha = 1; dRot(x, GFX.wpn[it.k], it.x, it.y - b * 0, it.a); }
   for (const c of G.corpses) if (inView(c.x, c.y)) dRot(x, c.spr, c.x, c.y, c.a);
-  drawDest(x); drawHeist(x); drawAct2bLow(x); drawAct3Low(x);
+  drawDest(x); drawHeist(x); drawAct2bLow(x); drawAct3Low(x); drawAct4Low(x);
   for (const e of G.ents) if (e.st === 'down' || e.st === 'freed') { const mo = P.mount === e, sit = e.st === 'freed' || (!e.crawl && e.downT < 0.4 && !mo), f = sit ? 3 : Math.floor((G.time + e.legT) * (mo ? 11 : 6)) % 3, j = e.hitT > 0 ? 1.2 : 0; dRot(x, GFX.ch[e.t].downF[f], e.x + rr(-j, j), e.y + rr(-j, j), e.a); if (e.bloody) { const hx = e.x + Math.cos(e.a) * 12, hy = e.y + Math.sin(e.a) * 12; x.fillStyle = '#7a0a12'; x.beginPath(); x.arc(hx, hy, 1.5 + e.bloody * 0.9, 0, 6.29); x.fill(); x.fillStyle = '#c0182a'; x.fillRect(Math.round(hx - 1), Math.round(hy - 1), 2, 2); } if (e.st === 'freed') { x.strokeStyle = '#5dff9a'; x.beginPath(); x.arc(e.x, e.y, 9, 0, 6.29); x.stroke(); } }
   for (const c of G.civs) if (!c.gone && c.st === 'run' && c.t0 > -0.01) { const wf = Math.floor(c.t0 * 16) & 7; x.globalAlpha = 1 - Math.min(1, (c.fade || 0) / 0.6); dRot(x, GFX.ch[c.t].legs[wf], c.x, c.y, c.a); dRot(x, bodyFrame(c.t, null, 'walk', wf), c.x, c.y, c.a); x.globalAlpha = 1; }
   for (const c of G.civs) if (!c.gone && c.st !== 'run') { if (c.st === 'held') dRot(x, GFX.ch.nadia.down, c.x, c.y, Math.PI); else { x.globalAlpha = Math.max(0, 1 - (c.t || 0) / 1.5); const wf = Math.floor((c.t || 0) * 14) & 7; dRot(x, GFX.ch.nadia.legs[wf], c.x, c.y - (c.t || 0) * 20, -Math.PI / 2); dRot(x, bodyFrame('nadia', null, 'walk', wf), c.x, c.y - (c.t || 0) * 20, -Math.PI / 2); x.globalAlpha = 1; } }
-  for (const e of G.ents) if (e.st !== 'dead' && e.st !== 'down' && e.st !== 'freed' && inView(e.x, e.y)) drawChar(x, e);
+  for (const e of G.ents) if (e.st !== 'dead' && e.st !== 'down' && e.st !== 'freed' && inView(e.x, e.y)) { if (skipCharDraw(e)) drawSuit(x, e); else drawChar(x, e); }
   if (!P.dead) { drawGhosts(x); if (P.inv > 0 && (G.time * 20 | 0) % 2) x.globalAlpha = 0.5; else if (G.implant === 'ghost') x.globalAlpha = (G.time * 9 | 0) % 11 === 0 ? 0.45 : 0.9; drawChar(x, P); x.globalAlpha = 1; if (P.dashT > 0 && P.lastImg && G.state === 'play') G.ghosts.push({ x: P.x, y: P.y, a: P.lastAng, img: P.lastImg, t: 0 }); if (G.slowT > 0 && P.lastImg && G.state === 'play' && (G.sandGhost = (G.sandGhost || 0) - 1 / 60) <= 0) { G.sandGhost = 0.05; G.ghosts.push({ x: P.x, y: P.y, a: P.lastAng, img: P.lastImg, lg: P.lastLeg, la: P.lastLa, t: 0, life: 0.7, col: SAND_COL[(G.time * 9 | 0) % 4] }); } }
   drawCarried(x); drawAct2bHigh(x); drawAct3High(x); drawSmoke(x);
   for (const d of M.doors) drawDoor(x, d);
@@ -3945,7 +4097,7 @@ function drawHud() {
   const tm = s => Math.floor(s / 60) + ':' + String(Math.ceil(s % 60) === 60 ? 0 : Math.ceil(s % 60)).padStart(2, '0');
   if (G.timer && !G.timer.off) htxt(x, G.timer.label + ' ' + tm(G.timer.t), W / 2, u * 1.6, u * 1.5, G.timer.t < 8 && (G.time * 4 | 0) % 2 ? '#fff' : '#ff3b4e', 'center', -0.03, '#000');
   if (G.hold && G.hold.started && !G.hold.done) htxt(x, 'HOLD ' + tm(Math.max(0, G.hold.need - G.hold.t)), W / 2, u * 1.6, u * 1.5, '#ff2a8a', 'center', -0.03, '#000');
-  const bosses = G.ents.filter(e => ETYPE[e.t].boss && e.st !== 'dead'); bosses.forEach((e, i) => { const bn = ETYPE[e.t].name; const bw = Math.min(W * 0.3, u * 12), bx = W / 2 - bw - u * 0.5 + i * (bw + u), by = H - u * 1.6; x.fillStyle = 'rgba(0,0,0,0.7)'; x.fillRect(bx - 3, by - 3, bw + 6, u * 0.6 + 6); x.fillStyle = CHARS[e.t].jacket; x.fillRect(bx, by, bw * Math.max(0, e.hp) / ETYPE[e.t].hp, u * 0.6); htxt(x, bn, bx + bw / 2, by - u * 0.55, u * 0.55, '#fff', 'center', 0); });
+  const bosses = G.ents.filter(e => ETYPE[e.t].boss && e.st !== 'dead'); bosses.forEach((e, i) => { const bn = ETYPE[e.t].name; const bw = Math.min(W * 0.3, u * 12), bx = W / 2 - bw - u * 0.5 + i * (bw + u), by = H - u * 1.6; x.fillStyle = 'rgba(0,0,0,0.7)'; x.fillRect(bx - 3, by - 3, bw + 6, u * 0.6 + 6); x.fillStyle = CHARS[e.t].bar || CHARS[e.t].jacket; x.fillRect(bx, by, bw * Math.max(0, e.hp) / ETYPE[e.t].hp, u * 0.6); htxt(x, bn, bx + bw / 2, by - u * 0.55, u * 0.55, '#fff', 'center', 0); });
   heistHud(x, u, W, H); hubHud(x, u, W, H);
   if (G.disguise && G.state === 'play') htxt(x, inRestricted(P.x, P.y) ? 'STAFF ONLY - GET OUT BEFORE THEY NOTICE' : 'UNDERCOVER', W / 2, u * 3.2, u * 0.7, inRestricted(P.x, P.y) ? '#ff2a8a' : '#5dff9a', 'center', 0);
   const W0 = P.wpn ? WEAPONS[P.wpn] : null;
@@ -4078,7 +4230,7 @@ function act(a) {
     case 'resume': resumeGame(); break;
     case 'restart': resumeGame(); restartFloor(); break;
     case 'quit': toTitle(); break;
-    case 'next': if (LEVELS[UI.li].job) openJobs(); else if (UI.li + 1 < STORY()) openIntro(UI.li + 1); else { showPanel('pEnd'); $('endMsg').textContent = "ACT 3 COMPLETE.\n\nDIRECTOR HALE IS DEAD. HIS TABLET HAS THE BOARD'S CALENDAR:\nONE MEETING, ONE ROOM, EVERY ONE OF THEM.\n\nACT 4 IS COMING: THE BOARD."; } break;
+    case 'next': if (LEVELS[UI.li].job) openJobs(); else if (UI.li + 1 < STORY()) openIntro(UI.li + 1); else { showPanel('pEnd'); $('pEnd').querySelector('.big').innerHTML = 'THE<br>END'; $('endMsg').textContent = "THE BOARD IS GONE. THE BROADCAST WENT OUT FROM THEIR OWN TOWER:\nTHE TAPES, THE LEDGERS, THE CLEANUP ORDERS. EVERY NAME.\n\nPORT OSTRA WOKE UP TO IT. NADIA SAYS THE CITY IS ITS OWN AGAIN -\nNOBODY KNOWS WHAT THAT MEANS YET. THAT'S THE POINT.\n\nTHANKS FOR PLAYING NEON SIEGE."; } break;
   }
 }
 const STORY = () => LEVELS.filter(l => !l.job && !l.hub).length, money = n => '$' + Math.round(n).toLocaleString('en-US');
