@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>NEON SIEGE: LOWER CITY</title>
+<style>
+html,body{margin:0;height:100%;background:#000;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;cursor:none}
+#view{position:fixed;image-rendering:pixelated;image-rendering:crisp-edges}
+#hud{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none}
+#ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.panel{display:none;pointer-events:auto;text-align:center;color:#fff;font-family:"Arial Black","Arial Bold",Impact,sans-serif;max-width:92vw;cursor:default}
+.panel.on{display:block}
+.big{font-size:clamp(34px,9vh,96px);font-style:italic;letter-spacing:.02em;line-height:.95;text-shadow:4px 4px 0 #000,-2px -2px 0 #ff2a8a,2px 2px 0 #22e6ff;animation:wob 2.4s ease-in-out infinite}
+@keyframes wob{0%,100%{transform:rotate(-3deg) scale(1)}50%{transform:rotate(3deg) scale(1.05)}}
+.sub{font-size:clamp(12px,2.6vh,22px);letter-spacing:.3em;color:#ffe14d;text-shadow:2px 2px 0 #000;margin:1.2vh 0 3vh}
+.m{display:block;margin:1.1vh auto;min-width:min(340px,70vw);padding:1.1vh 2vw;font:italic 900 clamp(15px,3.3vh,28px) "Arial Black",Impact,sans-serif;color:#fff;background:none;border:none;text-shadow:3px 3px 0 #000;cursor:pointer;letter-spacing:.06em}
+.m:hover,.m:focus{color:#ff2a8a;transform:scale(1.08) rotate(-2deg);outline:none}
+.m small{display:block;font:bold clamp(9px,1.7vh,13px) "Courier New",monospace;color:#9fe;letter-spacing:.1em;font-style:normal}
+.msg{font:bold clamp(13px,2.6vh,20px) "Courier New",monospace;color:#cff;text-align:left;white-space:pre-line;max-width:min(680px,86vw);margin:0 auto 3vh;line-height:1.5;background:rgba(0,0,0,.55);padding:2vh 2vw;border-left:4px solid #ff2a8a;text-shadow:1px 1px 0 #000}
+.who{font:italic 900 clamp(14px,3vh,24px) "Arial Black",Impact,sans-serif;color:#ff2a8a;margin-bottom:1vh;text-align:left;max-width:min(680px,86vw);margin-left:auto;margin-right:auto;text-shadow:2px 2px 0 #000}
+.cards{display:flex;flex-wrap:wrap;gap:1.4vh;justify-content:center;max-width:min(900px,94vw);margin:0 auto 2vh}
+.card{width:min(150px,27vw);padding:1.4vh 1vw;background:rgba(10,4,20,.82);border:3px solid #333;cursor:pointer;color:#fff;font:italic 900 clamp(12px,2.3vh,18px) "Arial Black",Impact,sans-serif;text-shadow:2px 2px 0 #000;transition:transform .1s}
+.card small{display:block;font:bold clamp(9px,1.6vh,12px) "Courier New",monospace;color:#bdf;font-style:normal;margin-top:.8vh;text-shadow:none}
+.card.sel{border-color:#ff2a8a;transform:rotate(-2deg) scale(1.06);background:rgba(60,0,40,.9)}
+.card.lock{opacity:.35;cursor:default}
+#pShop,#pJobs{background:rgba(8,4,16,.86);padding:2vh 2vw;border:3px solid #ff2a8a;box-shadow:0 0 30px rgba(255,42,138,.35)}
+.tally{margin:0 auto 2vh;font:italic 900 clamp(12px,2.5vh,22px) "Arial Black",Impact,sans-serif;border-collapse:collapse;text-shadow:3px 3px 0 #000}
+.tally td{padding:.4vh 2vw}.tally td:last-child{text-align:right;color:#ffe14d}
+.grade{font-size:clamp(50px,14vh,140px);font-style:italic;color:#ffe14d;text-shadow:5px 5px 0 #000,-3px 0 0 #ff2a8a;animation:wob 1.6s ease-in-out infinite;min-height:1em}
+.grade.stamp{animation:stamp .35s cubic-bezier(.2,1.6,.4,1) both,wob 1.6s ease-in-out .35s infinite}
+@keyframes stamp{0%{transform:scale(3) rotate(-20deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+.grade.gS{color:#5dff9a;text-shadow:5px 5px 0 #000,-3px 0 0 #ff2a8a,0 0 30px #5dff9a}.grade.gAp,.grade.gA{color:#22e6ff}.grade.gD{color:#ff3b4e}
+.tally tr.tot td{padding-top:1.2vh;font-size:1.25em;color:#fff}.tally tr.tot td:last-child{color:#5dff9a}
+.foot{font:bold clamp(9px,1.6vh,12px) "Courier New",monospace;color:#888;margin-top:2vh;letter-spacing:.1em}
+#tc{position:fixed;inset:0;display:none;pointer-events:none}
+body.touch #tc.on{display:block}
+.tb{position:absolute;pointer-events:auto;border-radius:50%;border:3px solid rgba(255,255,255,.4);background:rgba(0,0,0,.25);color:#fff;font:italic 900 clamp(10px,2.4vh,15px) "Arial Black",Impact,sans-serif;display:flex;align-items:center;justify-content:center;text-shadow:2px 2px 0 #000}
+.tb.act{background:rgba(255,42,138,.45)}
+#bPick{right:3vw;bottom:42vh;width:15vh;height:15vh}
+#bExec{right:calc(3vw + 17vh);bottom:30vh;width:15vh;height:15vh}
+#bAbil{right:calc(3vw + 18vh);bottom:56vh;width:12vh;height:12vh;display:none}
+#bNade{right:calc(3vw + 33vh);bottom:46vh;width:11vh;height:11vh;display:none}
+#bPause{left:2vw;top:2vh;width:10vh;height:10vh;border-radius:12px}
+#bRestart{left:50%;top:60%;transform:translate(-50%,-50%);width:26vh;height:12vh;border-radius:14px;display:none;background:rgba(255,42,138,.5)}
+.stick{position:absolute;width:24vh;height:24vh;margin:-12vh 0 0 -12vh;border-radius:50%;border:3px solid rgba(255,255,255,.3);display:none}
+.stick i{position:absolute;left:50%;top:50%;width:10vh;height:10vh;margin:-5vh 0 0 -5vh;border-radius:50%;background:rgba(255,255,255,.35)}
+#hint{position:absolute;left:0;right:0;bottom:3vh;text-align:center;font:bold clamp(9px,1.8vh,13px) "Courier New",monospace;color:rgba(255,255,255,.5)}
+#rotate{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;background:#000;color:#fff;font:italic 900 22px "Arial Black",Impact,sans-serif;text-align:center;padding:8vw}
+#rotate.on{display:flex}
+</style>
+</head>
+<body>
+<canvas id="view" width="640" height="360"></canvas>
+<canvas id="hud"></canvas>
+<div id="tc">
+  <div class="stick" id="sL"><i></i></div><div class="stick" id="sR"><i></i></div>
+  <div class="tb" id="bPick">GRAB<br>THROW</div>
+  <div class="tb" id="bExec">FINISH<br>USE</div>
+  <div class="tb" id="bAbil">DASH</div>
+  <div class="tb" id="bNade">NADE</div>
+  <div class="tb" id="bPause">II</div>
+  <div class="tb" id="bRestart">RESTART</div>
+  <div id="hint">LEFT: MOVE &nbsp;&middot;&nbsp; RIGHT: AIM + ATTACK</div>
+</div>
+<div id="ov">
+  <div class="panel" id="pTitle">
+    <div class="big">NEON<br>SIEGE</div>
+    <div class="sub">ACT 1 &middot; LOWER CITY</div>
+    <div class="sub" id="tCash" style="color:#5dff9a"></div>
+    <button class="m" data-a="start">START</button>
+    <button class="m" data-a="safehouse">SAFEHOUSE</button>
+    <button class="m" data-a="levels">CHAPTERS</button>
+    <button class="m" data-a="jobs">JOBS</button>
+    <button class="m" data-a="help">HOW TO PLAY</button>
+    <button class="m" data-a="assist" id="bAssist">AIM ASSIST: ON</button>
+    <button class="m" data-a="sway" id="bSway">CAMERA SWAY: ON</button>
+    <button class="m" data-a="sound" id="bSound">SOUND: ON</button>
+    <div class="foot">ORIGINAL ART, MUSIC &amp; SOUND MADE IN CODE</div>
+  </div>
+  <div class="panel" id="pLevels"><div class="sub">CHAPTERS</div><div id="lvList" style="max-height:58vh;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;gap:0 2vw"></div><button class="m" data-a="back">BACK</button></div>
+  <div class="panel" id="pJobs"><div class="sub">JOBS - LOUD HEISTS</div><div class="sub" id="jobCash" style="color:#5dff9a"></div><div id="jobList" style="max-height:62vh;overflow-y:auto;display:grid;grid-template-columns:1fr;gap:0"></div><button class="m" data-a="back">BACK</button></div>
+  <div class="panel" id="pShop"><div class="sub" id="shopTitle"></div><div class="sub" id="shopCash" style="color:#5dff9a"></div><div class="cards" id="shopCards" style="max-height:60vh;overflow-y:auto"></div><button class="m" data-a="hubBack">BACK</button></div>
+  <div class="panel" id="pHelp">
+    <div class="sub">HOW TO PLAY</div>
+    <div class="msg">ONE HIT KILLS YOU. ONE HIT KILLS THEM.
+WASD - MOVE &middot; MOUSE - AIM &middot; LEFT CLICK - ATTACK / SHOOT
+RIGHT CLICK - PICK UP / THROW WEAPON
+SPACE - GET ON A DOWNED ENEMY, THEN CLICK TO SMASH
+SHIFT (HOLD) - LOOK FURTHER &middot; MIDDLE CLICK / CTRL - LOCK ON
+E - FREE CAPTIVES / USE &middot; F - IMPLANT ABILITY &middot; G - GRENADE
+R - RESTART FLOOR &middot; ESC - PAUSE
+
+FISTS KNOCK PEOPLE DOWN. SWING A DOOR INTO SOMEONE TO FLATTEN THEM.
+GUNSHOTS ARE LOUD. QUICK KILLS BUILD YOUR COMBO.
+JOBS: E BAGS LOOT, E AGAIN THROWS THE BAG. BAGS SLOW YOU, THE SAFE STOPS YOU FIGHTING.<br>SAFEHOUSE: LEVELS AND JOBS PAY CASH. SPEND IT ON A STARTING WEAPON, UPGRADES, JACKETS AND JOB PLANNING.
+TALL THINGS (LOCKERS, PILLARS, CRATES, RACKS) STOP BULLETS. TABLES DON'T.
+
+ENEMIES
+GUARD (BLUE HELMET) - THE BASIC ONE. PIPES, PISTOLS, SMGS.
+BREACHER (RED HELMET) - CHARGES YOU WITH A SHOTGUN.
+CLEANER (BLACK SUIT) - FAST, SIDESTEPS WHILE SHOOTING.
+JUGGERNAUT (BIG) - PUNCHES DON'T DROP HIM. 3 BULLETS, A SAW OR A DOOR.
+HOUND - VERY FAST, DIES TO ONE HIT.
+WATCHER (GREEN VISOR) - SNIPER. MOVE WHEN THE LASER TURNS HOT.
+SCRAPPER (ORANGE, HARD HAT) - FAST BRAWLER. PIPES ONLY KNOCK PEOPLE DOWN SOMETIMES.
+DOCK TWINS - BOSSES. YOU'LL NEED THE CRANE.</div>
+    <button class="m" data-a="back">BACK</button>
+  </div>
+  <div class="panel" id="pIntro"><div class="who" id="iWho"></div><div class="msg" id="iMsg"></div><button class="m" data-a="toImplant">CONTINUE</button></div>
+  <div class="panel" id="pImplant"><div class="sub" id="impTitle">CHOOSE YOUR IMPLANT</div><div class="cards" id="impCards"></div><div class="sub" id="planTitle" style="color:#5dff9a"></div><div class="cards" id="planCards"></div><button class="m" data-a="go">GO</button></div>
+  <div class="panel" id="pResult">
+    <div class="sub" id="rName">LEVEL</div>
+    <table class="tally" id="rTable"></table>
+    <div class="grade" id="rGrade">A</div>
+    <button class="m" data-a="next">CONTINUE</button>
+    <button class="m" data-a="safehouse">SAFEHOUSE</button>
+  </div>
+  <div class="panel" id="pPause"><div class="big" style="font-size:clamp(30px,7vh,70px)">PAUSED</div><button class="m" data-a="resume">RESUME</button><button class="m" data-a="restart">RESTART FLOOR</button><button class="m" data-a="quit">QUIT TO TITLE</button></div>
+  <div class="panel" id="pEnd"><div class="big" style="font-size:clamp(30px,8vh,80px)">TO BE<br>CONTINUED</div><div class="msg" id="endMsg"></div><button class="m" data-a="quit">BACK TO TITLE</button></div>
+</div>
+<div id="rotate">ROTATE YOUR PHONE<br>TO LANDSCAPE</div>
+<script>
+/*__JS__*/
+</script>
+</body>
+</html>
