@@ -23,7 +23,7 @@ function explode(x, y, R, byP, src) {
   const P = G.player, dp = Math.hypot(P.x - x, P.y - y); if (!P.dead && dp < R * 0.9 && los(x, y, P.x, P.y)) hurtPlayer(null, Math.atan2(P.y - y, P.x - x));
   for (const p of G.props) if (!p.dead && Math.hypot((p.x + p.w / 2) * CELL - x, (p.y + p.h / 2) * CELL - y) < R + 8) damageProp(p, 99, x, y);
   for (const dr of M.doors) { const s = doorEnds(dr), [dd] = segDist(x, y, s[0], s[1], s[2], s[3]); if (dd < R * 1.2) dr.w = (dr.ang >= 0 ? 1 : -1) * 14; }
-  destExplode(x, y, R, byP); act3Explode(x, y, R);
+  destExplode(x, y, R, byP); act3Explode(x, y, R); gearExplode(x, y, R);
   makeNoise(x, y, 520);
 }
 function empBlast(x, y, R) {
@@ -68,7 +68,7 @@ function updRockets(dt) {
       if (r.t > 0.05) for (const e of G.ents) if (e !== r.src && e.st !== 'dead' && e.st !== 'freed' && e.st !== 'down' && Math.hypot(e.x - r.x, e.y - r.y) < e.r + 3) { boom = true; break; }
       if (!r.byP && !G.player.dead && Math.hypot(G.player.x - r.x, G.player.y - r.y) < G.player.r + 3) boom = true;
     }
-    if (boom) { r.rem = true; explode(r.x, r.y, 40, r.byP, 'rocket'); }
+    if (boom) { r.rem = true; explode(r.x, r.y, r.R || 40, r.byP, 'rocket'); }
   }
   G.rockets = G.rockets.filter(r => !r.rem);
 }

@@ -3,7 +3,7 @@ const COPS = { grd: ['grd', 'smg'], grdp: ['grd', 'pistol'], brc: ['brc', 'pump'
 const W_ = (...k) => k.map(q => COPS[q]);
 LEVELS.push(
   {
-    name: 'TIDEWATER VAULT', job: true, assets: ['stash', 'nades', 'keycopy', 'drill2'], fee: 15000, sub: 'BANK JOB - DRILL THE VAULT, BAG THE MONEY', par: 330, music: 3, bgHue: 200,
+    name: 'TIDEWATER VAULT', job: true, markName: 'THE BRANCH MANAGER', assets: ['stash', 'nades', 'keycopy', 'drill2'], fee: 15000, sub: 'BANK JOB - DRILL THE VAULT, BAG THE MONEY', par: 330, music: 3, bgHue: 200,
     pitch: 'A PRIVATE BANK THAT WASHES ORISON MONEY. KEYCARD, DRILL, BAGS, VAN.',
     msg: { who: 'JOB  //  TIDEWATER VAULT', text: "TIDEWATER PRIVATE BANK. ORISON WASHES ITS MONEY HERE.\nTHE MANAGER'S BODYGUARD CARRIES THE KEYCARD FOR THE SECURITY GATE.\nSET THE DRILL ON THE VAULT DOOR - IT WILL JAM, FIX IT.\n\nBAG THE MONEY, CARRY IT TO THE VAN. BAGS SLOW YOU DOWN.\nE TO BAG, E AGAIN TO THROW. MORE BAGS, BIGGER CUT." },
     floors: [
@@ -41,7 +41,7 @@ LEVELS.push(
     ]
   },
   {
-    name: 'CONVOY BREACH', job: true, assets: ['stash', 'nades', 'fastvan'], fee: 12000, sub: 'ARMORED TRUCK - ON THE ELEVATED HIGHWAY', par: 300, music: 5, bgHue: 25,
+    name: 'CONVOY BREACH', job: true, markName: 'THE CONVOY CHIEF', assets: ['stash', 'nades', 'fastvan'], fee: 12000, sub: 'ARMORED TRUCK - ON THE ELEVATED HIGHWAY', par: 300, music: 5, bgHue: 25,
     pitch: 'AN ORISON ARMORED TRUCK STOPPED ON THE OVERPASS. BLOW THE DOORS, DROP THE CASES.',
     msg: { who: 'JOB  //  CONVOY BREACH', text: "AN ORISON CASH TRUCK IS STUCK ON THE EAST OVERPASS. THE ESCORT IS STILL ON IT.\nPLANT THE CHARGE ON THE REAR DOORS, THEN BACK OFF.\n\nTHROW THE CASH CASES OVER THE RAIL AT THE DROP ZONE - OUR BOAT IS UNDERNEATH.\nTHE VAN NEEDS TIME TO GET UP THE RAMP. HOLD THE OVERPASS." },
     floors: [
@@ -65,7 +65,7 @@ LEVELS.push(
     ]
   },
   {
-    name: 'GLASS HOUSE', job: true, assets: ['stash', 'nades', 'cutline'], fee: 10000, sub: 'SMASH AND GRAB - BEAT THE TACTICAL TEAM', par: 200, music: 7, bgHue: 300,
+    name: 'GLASS HOUSE', job: true, markName: 'THE STORE BOSS', assets: ['stash', 'nades', 'cutline'], fee: 10000, sub: 'SMASH AND GRAB - BEAT THE TACTICAL TEAM', par: 200, music: 7, bgHue: 300,
     pitch: 'A NEON JEWELRY STORE. SMASH THE CASES, GRAB THE JEWELS, BEAT THE CLOCK.',
     msg: { who: 'JOB  //  GLASS HOUSE', text: "GLASS HOUSE - THE JEWELER THAT SELLS TO ORISON'S BOARD.\nNO PLAN, NO SUBTLETY. SMASH THE CASES, WALK OVER THE JEWELS.\n\nTHE ALARM IS WIRED STRAIGHT TO A TACTICAL TEAM. YOU HAVE A MINUTE.\nAFTER THAT IT GETS UGLY. THE STOCK ROOM HAS BONDS IF YOU'RE GREEDY." },
     floors: [
@@ -91,7 +91,7 @@ LEVELS.push(
     ]
   },
   {
-    name: 'COLD STORAGE', job: true, assets: ['stash', 'nades', 'tipoff'], fee: 14000, sub: 'CARTEL WAREHOUSE - DESTROY OR STEAL THE GUNS', par: 300, music: 9, bgHue: 190,
+    name: 'COLD STORAGE', job: true, markName: 'THE QUARTERMASTER', assets: ['stash', 'nades', 'tipoff'], fee: 14000, sub: 'CARTEL WAREHOUSE - DESTROY OR STEAL THE GUNS', par: 300, music: 9, bgHue: 190,
     pitch: 'A CARTEL FREEZER WAREHOUSE AT THE DOCKS. THE GUNS ARE IN WITH THE FISH.',
     msg: { who: 'JOB  //  COLD STORAGE', text: "THE ESTRELLA CARTEL MOVES ORISON'S OFF-BOOK WEAPONS THROUGH A FISH FREEZER AT THE DOCKS.\nTHE CRATES ARE IN THE FREEZERS ON THE EAST SIDE.\n\nSMASH THEM, OR BAG THE LOOSE ONES AND LOAD THEM ON OUR TRUCK FOR A CUT.\nTHEIR BOATS WILL KEEP COMING. WHEN IT'S DONE, FIGHT YOUR WAY OUT." },
     floors: [
@@ -124,7 +124,7 @@ LEVELS.push(
     ]
   },
   {
-    name: 'SKYLINE SAFE', job: true, assets: ['stash', 'nades', 'winch'], fee: 20000, sub: 'PENTHOUSE - CARRY THE SAFE TO THE RIG', par: 330, music: 11, bgHue: 260,
+    name: 'SKYLINE SAFE', job: true, markName: 'THE HEAD OF SECURITY', assets: ['stash', 'nades', 'winch'], fee: 20000, sub: 'PENTHOUSE - CARRY THE SAFE TO THE RIG', par: 330, music: 11, bgHue: 260,
     pitch: 'A PENTHOUSE SAFE TOO HEAVY TO RUN WITH. GET IT ON THE WINDOW-WASHER RIG.',
     msg: { who: 'JOB  //  SKYLINE SAFE', text: "THE TOP FLOOR OF THE MERIDIAN TOWER. AN ORISON DIRECTOR KEEPS HIS SAFE IN THE BEDROOM.\nIT'S TOO HEAVY TO CRACK HERE AND TOO HEAVY TO RUN WITH.\n\nCARRY IT UP TO THE ROOF AND PUT IT ON THE WINDOW-WASHER RIG.\nYOU CAN'T FIGHT WHILE YOU CARRY IT - CLEAR THE WAY FIRST.\nDEFEND THE RIG WHILE IT LOWERS, THEN TAKE THE ZIPLINE." },
     floors: [

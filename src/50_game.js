@@ -27,7 +27,7 @@ function startFloor(fi, carry) {
   for (const s of b.ens) spawnEnemy(s.t, (s.x + 0.5) * CELL, (s.y + 0.5) * CELL, s.w, s.a, s.p);
   for (const it of b.items) G.items.push({ k: it.k, x: (it.x + 0.5) * CELL, y: (it.y + 0.5) * CELL, ammo: WEAPONS[it.k] ? (WEAPONS[it.k].ammo || 0) : 2, a: rr(0, 6.28) });
   for (const w of b.wits) G.civs.push({ t: 'nadia', x: (w.x + 0.5) * CELL, y: (w.y + 0.5) * CELL, a: Math.PI, st: 'held', wit: 1 });
-  mechInit(def); heistInit(def); act2bInit(def); act3Init(def); act4Init(def); islandInit(def); destInit(); varyFloor(); warmFloor();
+  mechInit(def); heistInit(def); act2bInit(def); act3Init(def); act4Init(def); islandInit(def); gearInit(def); destInit(); varyFloor(); warmFloor();
   G.cam = { x: P.x, y: P.y }; GFX.ch.player = playerSet(G.implant, false); G.hackedE = null;
   G.state = 'play'; banner(def.name, '#ffe14d'); const tok = G.floorTok = (G.floorTok || 0) + 1; if (def.tip) setTimeout(() => { if (G.state === 'play' && G.floorTok === tok) toast(def.tip); }, 1800);
   musicStart(LEVELS[G.li].music);
@@ -146,6 +146,7 @@ function roboKill(e, how, ang) {
 }
 function goreKill(e, how, ang, method) {
   const S = GFX.ch[e.t], hx = e.x + Math.cos(ang) * 6, hy = e.y + Math.sin(ang) * 6;
+  if (gearGore(e, how, ang, method)) return;
   if (ETYPE[e.t].demon) { demonGore(e, how, ang, method); return; }
   if (ETYPE[e.t].dog) { roboKill(e, how, ang); return; }
   if (method === 'flare') { addBody(e.x, e.y, ang + rr(-0.4, 0.4), S.burnt, 90, ang, rr(-3, 3), mkPool(6)); G.dfx.push({ k: 'fire', x: e.x, y: e.y, t: 0, life: 2.5 }); for (let i = 0; i < 14; i++) part(e.x, e.y, rr(-110, 110), rr(-110, 110), rr(0.2, 0.5), pick(['#ffe14d', '#ff8a1c', '#ff3b1c']), ri(1, 2)); splat(e.x, e.y, ang, 6); return; }
@@ -181,7 +182,7 @@ function goreKill(e, how, ang, method) {
 }
 function killE(e, how, ang, byP, method) {
   if (e.st === 'dead') return;
-  if (byP && how === 'shot' && !G.noCrawl && !e.crawl && e.st !== 'down' && !ETYPE[e.t].boss && !ETYPE[e.t].dog && !ETYPE[e.t].demon && !ETYPE[e.t].shield && !(e.hacked > 0) && method !== 'emp' && Math.random() < 0.22) { crawlStart(e, ang, method); return; } e.st = 'dead'; e.sees = false; dropWeapon(e, ang + Math.PI);
+  if (byP && how === 'shot' && !G.noCrawl && !e.crawl && e.st !== 'down' && !ETYPE[e.t].boss && !ETYPE[e.t].dog && !ETYPE[e.t].demon && !ETYPE[e.t].shield && !(e.hacked > 0) && method !== 'cryo' && method !== 'emp' && Math.random() < 0.22) { crawlStart(e, ang, method); return; } e.st = 'dead'; e.sees = false; dropWeapon(e, ang + Math.PI);
   goreKill(e, how, ang, method); sfx(how === 'shot' || how === 'shotgun' ? 'gib' : 'splat', e.x, e.y); G.shake = Math.max(G.shake, how === 'shotgun' || how === 'exec' ? 0.6 : 0.35);
   if (byP) { G.hitStop = Math.max(G.hitStop, how === 'shotgun' || how === 'exec' ? 0.06 : 0.035); G.zp = Math.max(G.zp, how === 'exec' ? 0.09 : 0.05); }
   if (G.player.lock === e) G.player.lock = null;
@@ -216,6 +217,7 @@ function hurtPlayer(src, ang) {
   const P = G.player; if (P.dead || P.inv > 0 || P.dashT > 0 || G.god) return false;
   if (P.kev > 0) { P.kev--; P.inv = 0.6; sfx('plate'); pop(P.x, P.y, 'KEVLAR!', '#ffe14d'); G.flash = 0.25; for (let i = 0; i < 10; i++) part(P.x, P.y, rr(-160, 160), rr(-160, 160), rr(0.3, 0.6), pick(['#3a3a2a', '#5a5a3a', '#c8c0a0']), 2, 1); return false; }
   if (P.shield > 0) { P.shield--; P.inv = 0.6; sfx('plate'); pop(P.x, P.y, 'PLATING!', '#4ff'); G.flash = 0.3; GFX.ch.player = playerSet('plating', true); for (let i = 0; i < 10; i++) part(P.x, P.y, rr(-160, 160), rr(-160, 160), rr(0.3, 0.6), pick(['#8a9099', '#c8ccd2', '#5a5e66']), 2, 1); return false; }
+  if (G.implant === 'heart' && !G.heartUsed) { heartDown(src, ang); return false; }
   P.dead = true; G.deadT = 0; P.mount = null; G.levelDeaths = (G.levelDeaths || 0) + 1; dropWeapon(P, ang + Math.PI); const sg = src && (src.wpn === 'pump' || src.wpn === 'twin'), ct = src && src.wpn && WEAPONS[src.wpn].sharp; addBody(P.x, P.y, ang, sg ? GFX.ch.player.gib : GFX.ch.player.dead[ri(0, 2)], sg ? 220 : 130, ang, rr(-3, 3), mkPool(11)); G.hitStop = 0.12; splat(P.x, P.y, ang, 22, true); gibs(P.x, P.y, ang, sg ? 18 : 6, 0.7); wallSplat(P.x, P.y, ang, 12);
   sfx('pdeath'); G.shake = 1; G.slowT = 0; musicStop(); return true;
 }
@@ -240,6 +242,7 @@ function attack(e, isP) {
   if (W.knife) { if (isP) throwKnife(e); return; }
   if (W.rail) return;
   if (W.fireball) { e.cd = W.cd * (isP ? 0.4 : rr(0.8, 1.3)); e.atk = { k: 'rec', t: 0, d: 0.2 }; hurlFireball(e, e.a, 165, false, isP); return; }
+  if (W.glauncher) { if (isP) e.ammo--; e.cd = W.cd; e.atk = { k: 'rec', t: 0, d: 0.14 }; e.flashT = 0.06; launchNade(e); return; }
   if (W.rocket) { if (isP && UI.assist !== false) { const t = gunTarget(e); if (t) e.a = Math.atan2(t.y - e.y, t.x - e.x); } if (isP) e.ammo--; e.cd = W.cd; e.atk = { k: 'rec', t: 0, d: 0.14 }; e.flashT = 0.06; fireRocket(e, isP); return; }
   if (isP && UI.assist !== false) { const best = gunTarget(e); if (best) { const tt = Math.hypot(best.x - e.x, best.y - e.y) / 600; e.a = Math.atan2(best.y + best.vy * tt - e.y, best.x + best.vx * tt - e.x); } }
   if (isP) e.ammo--; e.cd = W.cd * (isP || e.hacked > 0 ? 1 : 1.8); e.flashT = 0.05; e.atk = { k: 'rec', t: 0, d: W.pellets > 1 ? 0.1 : 0.07, nx: e.wpn === 'pump' ? { k: 'pump', t: 0, d: 0.34 } : null };
@@ -276,6 +279,7 @@ function meleeHits(e, W, isP) {
       e.meleeT = 0;
       if (t.crawl) { killE(t, W && W.sharp ? 'cut' : 'hit', ang, true, e.wpn || 'fists'); sfx(W ? 'thud' : 'punch', t.x, t.y); continue; }
       if (!W) { if (G.implant === 'blades' && !ETYPE[t.t].armor) { killE(t, 'cut', ang, true, 'blades'); sfx('slash', t.x, t.y); } else if (G.implant === 'od' && t.t !== 'fat') killE(t, 'hit', ang, true, 'fists'); else knockdown(t, ang, 'punch'); sfx('punch', t.x, t.y); }
+      else if (W.shock && !ETYPE[t.t].boss) batonHit(t, ang);
       else if (ETYPE[t.t].boss) { if (t.lastSwing !== G.swingId) { t.lastSwing = G.swingId; t.hp -= e.wpn === 'saw' || W.crush ? 3 : 2; t.hitT = 0.12; splat(t.x, t.y, ang, 6); sfx('thud', t.x, t.y); if (t.hp <= 0) killE(t, 'cut', ang, true, e.wpn); else knockdown(t, ang, 'melee'); } }
       else if (ETYPE[t.t].armor && e.wpn !== 'saw' && !W.crush) { knockdown(t, ang, 'melee'); sfx('thud', t.x, t.y); }
       else if (W.blunt && Math.random() < (W.kd !== undefined ? W.kd : 0.4)) { knockdown(t, ang, 'melee'); sfx('thud', t.x, t.y); pop(t.x, t.y, 'KNOCKED DOWN', '#ffe14d'); }
@@ -302,7 +306,7 @@ function nearUsable() {
   for (const c of M.b.cages) { if (!c.open && Math.hypot(c.ux - P.x, c.uy - P.y) < (c.kind === 'cont' ? 16 : 22)) return { kind: 'cage', o: c, text: c.kind === 'kids' ? 'FREE THE KIDS' : c.kind === 'cont' ? 'OPEN THE CONTAINER' : 'OPEN THE CAGE' }; }
   for (const s of M.b.sws) { if (!s.done && Math.hypot(s.ux - P.x, s.uy - P.y) < 18) return { kind: 'sw', o: s, text: s.label }; }
   for (const t of M.b.terms) { const tx = (t.x + 0.5) * CELL, ty = (t.y + 0.5) * CELL; if (Math.hypot(tx - P.x, ty - P.y) < 15) return { kind: 'term', o: t, text: 'READ' }; }
-  return hubUsable(P) || heistUsable(P);
+  return hubUsable(P) || heistUsable(P) || envUsable(P);
 }
 function useAction() {
   const P = G.player; if (P.dead || P.mount) return;
@@ -325,6 +329,7 @@ function tickAnim(e, dt) { if (e.atk) { e.atk.t += dt; if (e.atk.t >= e.atk.d) e
 function updPlayer(dt) {
   const P = G.player; P.inv -= dt; P.dashCd -= dt; P.abilCd -= dt; tickAnim(P, dt);
   if (P.dead) { G.deadT += dt; return; }
+  if (gearPlayer(dt)) return;
   if (P.mount) {
     const e = P.mount;
     if (e.st !== 'down') P.mount = null;
@@ -548,7 +553,7 @@ function updateGame(dt) {
   if (G.player.lock && (G.player.lock.st === 'dead' || G.player.lock.st === 'down')) G.player.lock = null;
   for (const p of G.pops) p.t += dt; G.pops = G.pops.filter(p => p.t < 1.3);
   for (const c of G.civs) if (c.st === 'free') { c.t = (c.t || 0) + dt; if (c.t > 1.5) c.gone = true; } else if (c.st === 'run') civRun(c, dt);
-  mechUpdate(edt); heistUpdate(edt); act2bUpdate(edt); act3Update(edt); act4Update(edt); islandUpdate(edt); if (G.birds.length) updBirds(dt); if (G.storm) updStorm(dt); if (G.disguise) updDisguise(dt); updGuests(dt);
+  mechUpdate(edt); heistUpdate(edt); act2bUpdate(edt); act3Update(edt); act4Update(edt); islandUpdate(edt); gearUpdate(edt); if (G.birds.length) updBirds(dt); if (G.storm) updStorm(dt); if (G.disguise) updDisguise(dt); updGuests(dt);
   G.shake = Math.max(0, G.shake - dt * 2.5); G.flash = Math.max(0, G.flash - dt * 2); G.muzzle = Math.max(0, (G.muzzle || 0) - dt);
   if (G.banner) { G.banner.life -= dt; if (G.banner.life <= 0) G.banner = null; } if (G.toast) { G.toast.life -= dt; if (G.toast.life <= 0) G.toast = null; } if (G.lore) { G.lore.life -= dt; if (G.lore.life <= 0) G.lore = null; }
 }

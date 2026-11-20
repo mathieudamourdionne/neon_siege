@@ -13,7 +13,7 @@ const { chromium, GAME, ROOT } = require('./pw');
     // broke: can't buy
     WALLET.add(-1e9); openShop('weapons'); const c0 = [...document.querySelectorAll('#shopCards .card')]; c0[c0.length - 1].onclick(); out.brokeBuyBlocked = !owned('w_ar');
     // earn, then buy an assault rifle (auto-equips), a perk and a jacket
-    WALLET.add(100000); openShop('weapons'); const cards = [...document.querySelectorAll('#shopCards .card')]; cards[cards.length - 1].onclick(); out.boughtAR = owned('w_ar') && store('loadout') === 'ar'; out.cashAfterAR = WALLET.get();
+    WALLET.add(100000); openShop('weapons'); const cards = [...document.querySelectorAll('#shopCards .card')]; cards.find(c => /ASSAULT RIFLE/.test(c.textContent)).onclick(); out.boughtAR = owned('w_ar') && store('loadout') === 'ar'; out.cashAfterAR = WALLET.get();
     openShop('perks'); [...document.querySelectorAll('#shopCards .card')][4].onclick(); out.kevlar = PERKS.kevlar; out.cashAfterKevlar = WALLET.get();
     openShop('jackets'); [...document.querySelectorAll('#shopCards .card')][1].onclick(); out.jacket = store('jacket'); out.jacketColour = GFX.ch.player.c && GFX.ch.player.c.jacket;
     act('hubBack');

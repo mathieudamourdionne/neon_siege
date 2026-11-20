@@ -1,6 +1,6 @@
 // ---------- implant abilities: dash, reflex boost (big slow-mo), neural spike (hack an enemy) ----------
 function ability() {
-  const P = G.player; if (P.dead) return;
+  const P = G.player; if (P.dead || P.reviveT > 0) return; if (gearAbility()) return;
   if (G.implant === 'dash' && P.dashCd <= 0 && !P.mount) {
     let mx = IN.mx, my = IN.my; if (Math.hypot(mx, my) < 0.2) { mx = Math.cos(P.a); my = Math.sin(P.a); } const l = Math.hypot(mx, my);
     P.vx = mx / l * 380; P.vy = my / l * 380; P.dashT = 0.15; P.dashCd = 0.7; sfx('dash');

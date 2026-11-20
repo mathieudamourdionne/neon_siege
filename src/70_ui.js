@@ -124,7 +124,7 @@ function levelDone() {
   const rows = [['KILLS', S.kills], ['FINISHERS', S.execs], S.freed ? ['CAPTIVES FREED', S.freed] : null, ['KILL POINTS', G.score]].filter(Boolean).concat(bon.map(b => [b[0], (b[1] >= 0 ? '+' : '') + b[1]])).concat([['TOTAL', total]]);
   UI.lastRows = rows;
   const par0 = Math.max(1, S.kills) * 800, k0 = total / par0, gr0 = k0 > 2.1 ? 'S' : k0 > 1.7 ? 'A+' : k0 > 1.35 ? 'A' : k0 > 1.05 ? 'B' : k0 > 0.75 ? 'C' : 'D'; let earned = 0;
-  if (lv.job) { const loot = S.loot || 0, cut = PERKS.fence ? Math.round(loot * 0.2) : 0, pay = loot + cut + lv.fee; rows.push(['LOOT SECURED', money(loot)]); if (cut) rows.push(['FENCE CUT +20%', money(cut)]); rows.push(['JOB FEE', money(lv.fee)], ['PAYOUT', money(pay)]); if (pay > (store('jobpay' + lv.name) || 0)) store('jobpay' + lv.name, pay); earned = pay; }
+  if (lv.job) { const loot = S.loot || 0, cut = PERKS.fence ? Math.round(loot * 0.2) : 0, mk = G.markTaken ? markBonus(lv) : 0, pay = loot + cut + lv.fee + mk; rows.push(['LOOT SECURED', money(loot)]); if (cut) rows.push(['FENCE CUT +20%', money(cut)]); if (mk) rows.push(['MARK TAKEN ALIVE', money(mk)]); rows.push(['JOB FEE', money(lv.fee)], ['PAYOUT', money(pay)]); if (pay > (store('jobpay' + lv.name) || 0)) store('jobpay' + lv.name, pay); earned = pay; }
   else { earned = Math.round(total * 0.6 / 100) * 100; rows.push(['CASH EARNED', money(earned)]); }
   if (gr0 === 'S' && !store('sbonus' + lv.name)) { store('sbonus' + lv.name, 1); earned += 10000; rows.push(['FIRST S RANK BONUS', money(10000)]); }
   WALLET.add(earned); rows.push(['WALLET', money(WALLET.get())]);

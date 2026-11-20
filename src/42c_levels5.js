@@ -41,7 +41,7 @@ LEVELS.push(
           b.e('rio', 26, 31, 'pistol', 'u').e('rio', 37, 31, 'pistol', 'u').e('grd', 22, 22, 'pistol', 'r').e('grd', 41, 23, 'pipe', 'l').e('grd', 31, 23, 'bat', 'd');
           b.e('grd', 5, 15, 'pistol', 'r').e('grd', 6, 20, 'pipe', 'u').e('fat', 57, 20, 'pump', 'l').e('grd', 59, 28, 'pistol', 'u');
           b.e('grd', 22, 6, 'smg', 'd').e('cln', 41, 6, 'pistol', 'd').e('snp', 31, 9, 'rifle', 'd');
-          b.i('pump', 33, 36);
+          b.i('pump', 33, 36).i('baton', 31, 36);
           b.sp(31, 37).sp(60, 30).sp(20, 3);
         } }
     ]
@@ -79,7 +79,7 @@ LEVELS.push(
           b.e('grd', 28, 14, 'machete', 'r').e('grd', 36, 18, 'pistol', 'l').e('fat', 32, 11, 'pipe', 'd');
           b.e('cln', 46, 13, 'smart', 'r').e('grd', 52, 19, 'smg', 'l').e('hnd', 30, 25, null, 'r');
           b.e('grd', 14, 34, 'pistol', 'r').e('cln', 27, 32, 'smg', 'l').e('brc', 40, 35, 'pump', 'r').e('rio', 50, 33, 'pistol', 'l');
-          b.i('ar', 45, 13).i('frag', 51, 12).i('flare', 44, 11);
+          b.i('ar', 45, 13).i('frag', 51, 12).i('flare', 44, 11).i('glaunch', 46, 11);
           b.sp(58, 26).sp(10, 36).sp(53, 3);
         } }
     ]

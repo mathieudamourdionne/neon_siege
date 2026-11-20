@@ -124,7 +124,7 @@ LEVELS.push(
           b.chand(20, 16).chand(39, 16).chand(29, 26).o('table', 12, 20).o('table', 46, 20).o('pillar', 22, 10).o('pillar', 36, 10).o('sofa', 27, 30);
           b.e('hst', 30, 4, 'smart', 'd');
           b.e('cln', 14, 18, 'smg', 'r').e('cln', 45, 22, 'smart', 'l').e('grd', 24, 12, 'pipe', 'd').e('grd', 36, 28, 'machete', 'u').e('rio', 30, 22, 'pistol', 'd').e('grd', 4, 19, 'pistol', 'r').e('grd', 55, 19, 'pistol', 'l').e('hnd', 46, 10, null, 'l').e('hnd', 12, 28, null, 'r');
-          b.i('pump', 31, 33).i('frag', 28, 33);
+          b.i('pump', 31, 33).i('frag', 28, 33).i('cryo', 34, 33);
           b.sp(30, 38).sp(9, 9).sp(50, 9).sp(9, 32).sp(50, 32);
         } }
     ]

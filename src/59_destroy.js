@@ -56,6 +56,7 @@ function destInit() {
   if (gala) { let n = 0; for (const [x, y] of cand) { if (n >= 2) break; const [dx, dy] = wallSide(x, y); if (!dy) continue; const c = y * W + x, c2 = c + 1; if (!free(c) || !free(c2) || !M.wall[(y + dy) * W + x + 1] || !far(x, y, 'fish', 12)) continue; if (!tryBlock([c, c2])) continue; G.dest.push({ k: 'fish', cx: x, cy: y, x: (x + 1) * CELL, y: (y + 0.5) * CELL, cells: [c, c2], fl: dy }); n++; } }
   // fire extinguishers on the walls of indoor rooms
   if (!outdoors) { let n = 0; for (const [x, y] of cand) { if (n >= 3) break; const c = y * W + x; if (!free(c) || !far(x, y, 'ext', 12)) continue; const f = FL_IDS[M.fl[c] - 1]; if (INDUSTRIAL.includes(f) && f !== 'dark') continue; const [dx, dy] = wallSide(x, y); busy[c] = 1; G.dest.push({ k: 'ext', cx: x, cy: y, x: (x + 0.5 + dx * 0.32) * CELL, y: (y + 0.5 + dy * 0.32) * CELL, a: Math.atan2(-dy, -dx) }); n++; } }
+  envPlace(cand, free, wallSide, tryBlock, far, busy, outdoors, industrial);
   // weak walls where explosives turn up: near barrels or explosive pickups
   const boomy = !floorDef().noWeak && (G.dest.some(d => d.k === 'barrel') || b.items.some(it => ['rocket', 'rail', 'frag'].includes(it.k)));
   if (boomy) { const segs = []; for (let y = 2; y < H - 2; y++) for (let x = 2; x < W - 2; x++) { const c = y * W + x; if (!M.wall[c] || M.win[c] || busy[c]) continue;
@@ -100,6 +101,7 @@ function breakWeak(s) {
 }
 function hitDest(d, byP, ang, melee) {
   if (d.dead) return;
+  if (d.k === 'vend' || d.k === 'shock') { envHit(d, byP, ang, melee); return; }
   if (d.k === 'barrel') { if (d.fuse < 0) { d.fuse = melee ? 0.9 : 0.32; d.byP = byP; sfx('fuse', d.x, d.y); } return; }
   if (d.k === 'ext') { d.dead = true; G.smoke.push({ x: d.x + Math.cos(d.a) * 10, y: d.y + Math.sin(d.a) * 10, r: 4, t: 0, life: 7.5, seed: Math.random() * 99 }); sfx('hiss', d.x, d.y); sfx('tink', d.x, d.y); chunk(d.x, d.y, d.a, 0.6, GFX.ext, 1.4); makeNoise(d.x, d.y, 200); if (byP) pop(d.x, d.y, 'SMOKESCREEN', '#e8f0f0'); return; }
   if (d.k === 'fish') { d.dead = true; for (const c of d.cells) { M.solid[c] = 0; M.tall[c] = 0; } mapChanged(); sfx('glass', d.x, d.y); sfx('splash', d.x, d.y);
@@ -117,7 +119,7 @@ function explodeBarrel(d) {
 function destBullet(b, ox, oy) {
   const x = Math.floor(b.x / CELL), y = Math.floor(b.y / CELL), c = y * M.W + x, ang = Math.atan2(b.vy, b.vx), byP = b.owner === 'p';
   if (M.win[c]) breakWindow(c, ang);
-  for (const d of G.dest) if (!d.dead && (d.k === 'barrel' ? d.cx === x && d.cy === y : d.k === 'fish' ? d.cells.includes(c) : Math.hypot(d.x - ox, d.y - oy) < 6)) hitDest(d, byP, ang);
+  for (const d of G.dest) if (!d.dead && (d.k === 'barrel' ? d.cx === x && d.cy === y : d.k === 'fish' || d.k === 'vend' ? d.cells.includes(c) : Math.hypot(d.x - ox, d.y - oy) < 6)) hitDest(d, byP, ang);
   const oi = M.objAt[c]; if (oi >= 0 && SPARKY[M.b.objs[oi].k]) sparkObj(oi, ox, oy, ang);
 }
 function sparkObj(oi, x, y, ang) {
@@ -128,7 +130,7 @@ function sparkObj(oi, x, y, ang) {
 // player swings break things in reach
 function destMelee(e, W) {
   const reach = (W ? W.reach : 21) + 4;
-  for (const d of G.dest) { if (d.dead) continue; const dd = Math.hypot(d.x - e.x, d.y - e.y), a = Math.atan2(d.y - e.y, d.x - e.x); if (dd < reach + (d.k === 'fish' ? 8 : 4) && Math.abs(angDiff(a, e.a)) < 1.3) hitDest(d, true, a, true); }
+  for (const d of G.dest) { if (d.dead) continue; const dd = Math.hypot(d.x - e.x, d.y - e.y), a = Math.atan2(d.y - e.y, d.x - e.x); if (dd < reach + (d.k === 'fish' || d.k === 'vend' ? 8 : 4) && Math.abs(angDiff(a, e.a)) < 1.3) hitDest(d, true, a, true); }
 }
 function destExplode(x, y, R, byP) {
   for (const d of G.dest) if (!d.dead && Math.hypot(d.x - x, d.y - y) < R + 6) { if (d.k === 'barrel') { if (d.fuse < 0 || d.fuse > 0.2) { d.fuse = rr(0.12, 0.25); d.byP = byP; } } else hitDest(d, byP, Math.atan2(d.y - y, d.x - x)); }
@@ -156,6 +158,7 @@ function drawDest(x) {
   for (const d of G.dest) {
     if (d.k === 'barrel' && !d.dead) { dRot(x, GFX.barrel, d.x, d.y, 0); if (d.fuse >= 0 && (G.time * 18 | 0) % 2) { x.globalCompositeOperation = 'lighter'; x.globalAlpha = 0.6; dRot(x, tint(GFX.barrel, '#ffd040'), d.x, d.y, 0); x.globalAlpha = 1; x.globalCompositeOperation = 'source-over'; } }
     else if (d.k === 'ext' && !d.dead) dRot(x, GFX.ext, d.x, d.y, d.a + Math.PI / 2);
+    else if (d.k === 'vend' || d.k === 'shock') drawEnv(x, d);
     else if (d.k === 'fish') { dImg(x, d.dead ? GFX.tankBroken : GFX.tank, d.cx * CELL, d.cy * CELL); if (!d.dead) for (let i = 0; i < 2; i++) { const t = G.time * (0.6 + i * 0.25) + i * 2, fx = d.cx * CELL + 8 + Math.sin(t) * 5.5, fy = d.cy * CELL + 3 + i * 1.6; dRot(x, i ? GFX.fishB : GFX.fishA, fx, fy, Math.cos(t) > 0 ? 0 : Math.PI); } }
   }
   for (const f of G.fish) { x.fillStyle = 'rgba(0,0,0,0.3)'; x.fillRect(f.x - 2, f.y + 0.5, 4, 1); dRot(x, f.img, f.x, f.y - f.z, f.a); }

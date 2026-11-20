@@ -45,7 +45,7 @@ LEVELS.push(
           b.e('grd', 25, 5, 'pistol', 'r', { p: [[25, 5], [45, 5]] }).e('cln', 11, 14, 'smg', 'd').e('grd', 52, 13, 'pistol', 'd').e('tec', 29, 18, null, 'r');
           b.e('cln', 35, 24, 'smart', 'l').e('grd', 42, 17, 'pipe', 'l').e('grd', 21, 11, 'pistol', 'r').e('fat', 45, 10, 'pump', 'l');
           b.e('grd', 20, 29, 'machete', 'r').e('rio', 30, 34, 'pistol', 'u').e('cln', 46, 34, 'smg', 'l').e('grd', 45, 29, 'pistol', 'l').e('hnd', 52, 25, null, 'u');
-          b.i('ar', 47, 29).i('frag', 41, 29);
+          b.i('ar', 47, 29).i('frag', 41, 29).i('cryo', 45, 29);
           b.sp(58, 21).sp(10, 35).sp(53, 4);
         } }
     ]

@@ -8,7 +8,7 @@ const { chromium, GAME, ROOT } = require('./pw');
   p.on('console', m => { if (m.type() !== 'error') return; const k = m.text().split('\n')[0]; if (!errs.has(k)) errs.set(k, { n: 0, stack: m.text().split('\n').slice(0, 6).join('\n'), ctx: null }); errs.get(k).n++; });
   await p.goto(GAME); await p.waitForTimeout(500);
   const floors = await p.evaluate(() => { const L = []; LEVELS.forEach((lv, li) => lv.floors.forEach((f, fi) => L.push([li, fi]))); return L; });
-  const imps = ['none', 'od', 'dash', 'plating', 'spike', 'reflex', 'ghost', 'blades'];
+  const imps = ['none', 'od', 'dash', 'plating', 'spike', 'reflex', 'ghost', 'blades', 'wire', 'wrist', 'thrust', 'heart'];
   let n = 0;
   for (const [li, fi] of floors) for (const god of [true, false]) {
     const imp = imps[n++ % imps.length];
