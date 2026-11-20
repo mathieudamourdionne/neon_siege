@@ -67,10 +67,11 @@ function drawAct4Low(x) {
   for (const s of G.strikes) { const k = 1 - s.t / s.T; x.strokeStyle = `rgba(255,59,78,${0.4 + 0.5 * k})`; x.lineWidth = 1; x.beginPath(); x.arc(s.x, s.y, 22, 0, 6.29); x.stroke(); x.fillStyle = `rgba(255,59,78,${0.08 + 0.2 * k})`; x.beginPath(); x.arc(s.x, s.y, 22 * k, 0, 6.29); x.fill(); x.fillStyle = '#ff3b4e'; x.fillRect(s.x - 3, s.y - 0.5, 6, 1); x.fillRect(s.x - 0.5, s.y - 3, 1, 6); }
 }
 function drawSuit(x, e) {
+  if (e.t === 'mrw') { drawHorned(x, e); return; }
   const st = e.stepT || 0, ca = Math.cos(e.a), sa = Math.sin(e.a), px = -sa, py = ca;
   x.fillStyle = 'rgba(0,0,0,0.35)'; x.beginPath(); x.ellipse(e.x + 4, e.y + 5, 17, 15, 0, 0, 6.29); x.fill();
   for (const sd of [-1, 1]) { const f = Math.sin(st * 6 + (sd > 0 ? Math.PI : 0)) * 6; dRot(x, GFX.mechFoot, e.x + px * sd * 10 + ca * f, e.y + py * sd * 10 + sa * f, e.a); }
   dRot(x, GFX.mech, e.x, e.y, e.a);
   if (e.hitT > 0) { x.globalCompositeOperation = 'lighter'; x.globalAlpha = 0.5; dRot(x, GFX.mech, e.x, e.y, e.a); x.globalAlpha = 1; x.globalCompositeOperation = 'source-over'; }
 }
-function skipCharDraw(e) { return e.t === 'chr'; }
+function skipCharDraw(e) { return e.t === 'chr' || e.t === 'mrw'; }

@@ -27,7 +27,7 @@ function startFloor(fi, carry) {
   for (const s of b.ens) spawnEnemy(s.t, (s.x + 0.5) * CELL, (s.y + 0.5) * CELL, s.w, s.a, s.p);
   for (const it of b.items) G.items.push({ k: it.k, x: (it.x + 0.5) * CELL, y: (it.y + 0.5) * CELL, ammo: WEAPONS[it.k] ? (WEAPONS[it.k].ammo || 0) : 2, a: rr(0, 6.28) });
   for (const w of b.wits) G.civs.push({ t: 'nadia', x: (w.x + 0.5) * CELL, y: (w.y + 0.5) * CELL, a: Math.PI, st: 'held', wit: 1 });
-  mechInit(def); heistInit(def); act2bInit(def); act3Init(def); act4Init(def); destInit(); varyFloor(); warmFloor();
+  mechInit(def); heistInit(def); act2bInit(def); act3Init(def); act4Init(def); islandInit(def); destInit(); varyFloor(); warmFloor();
   G.cam = { x: P.x, y: P.y }; GFX.ch.player = playerSet(G.implant, false); G.hackedE = null;
   G.state = 'play'; banner(def.name, '#ffe14d'); const tok = G.floorTok = (G.floorTok || 0) + 1; if (def.tip) setTimeout(() => { if (G.state === 'play' && G.floorTok === tok) toast(def.tip); }, 1800);
   musicStart(LEVELS[G.li].music);
@@ -117,7 +117,7 @@ function addScore(base, x, y, label, method) {
   const p = pop(x, y, String(pts), '#fff'); p.pts = pts; p.label = label || ''; p.combo = G.combo;
 }
 function dropWeapon(e, ang) {
-  if (!e.wpn) return; const W = WEAPONS[e.wpn];
+  if (!e.wpn) return; const W = WEAPONS[e.wpn]; if (W.nodrop) return;
   if (W.knife && e.ammo <= 0) { e.wpn = null; return; }
   const sp = rr(60, 110), da = ang + rr(-0.5, 0.5); G.items.push({ k: e.wpn, x: e.x, y: e.y, vx: Math.cos(da) * sp, vy: Math.sin(da) * sp, va: rr(-14, 14), ammo: W.melee ? 0 : e.kind === 'p' ? e.ammo : ri(Math.ceil(W.ammo / 3), W.ammo), a: rr(0, 6.28) }); e.wpn = null;
 }
@@ -146,6 +146,7 @@ function roboKill(e, how, ang) {
 }
 function goreKill(e, how, ang, method) {
   const S = GFX.ch[e.t], hx = e.x + Math.cos(ang) * 6, hy = e.y + Math.sin(ang) * 6;
+  if (ETYPE[e.t].demon) { demonGore(e, how, ang, method); return; }
   if (ETYPE[e.t].dog) { roboKill(e, how, ang); return; }
   if (method === 'flare') { addBody(e.x, e.y, ang + rr(-0.4, 0.4), S.burnt, 90, ang, rr(-3, 3), mkPool(6)); G.dfx.push({ k: 'fire', x: e.x, y: e.y, t: 0, life: 2.5 }); for (let i = 0; i < 14; i++) part(e.x, e.y, rr(-110, 110), rr(-110, 110), rr(0.2, 0.5), pick(['#ffe14d', '#ff8a1c', '#ff3b1c']), ri(1, 2)); splat(e.x, e.y, ang, 6); return; }
   if (method === 'rocket' || method === 'frag' || method === 'barrel') { // blown up: charred body, chunks everywhere
@@ -180,11 +181,11 @@ function goreKill(e, how, ang, method) {
 }
 function killE(e, how, ang, byP, method) {
   if (e.st === 'dead') return;
-  if (byP && how === 'shot' && !G.noCrawl && !e.crawl && e.st !== 'down' && !ETYPE[e.t].boss && !ETYPE[e.t].dog && !ETYPE[e.t].shield && !(e.hacked > 0) && method !== 'emp' && Math.random() < 0.22) { crawlStart(e, ang, method); return; } e.st = 'dead'; e.sees = false; dropWeapon(e, ang + Math.PI);
+  if (byP && how === 'shot' && !G.noCrawl && !e.crawl && e.st !== 'down' && !ETYPE[e.t].boss && !ETYPE[e.t].dog && !ETYPE[e.t].demon && !ETYPE[e.t].shield && !(e.hacked > 0) && method !== 'emp' && Math.random() < 0.22) { crawlStart(e, ang, method); return; } e.st = 'dead'; e.sees = false; dropWeapon(e, ang + Math.PI);
   goreKill(e, how, ang, method); sfx(how === 'shot' || how === 'shotgun' ? 'gib' : 'splat', e.x, e.y); G.shake = Math.max(G.shake, how === 'shotgun' || how === 'exec' ? 0.6 : 0.35);
   if (byP) { G.hitStop = Math.max(G.hitStop, how === 'shotgun' || how === 'exec' ? 0.06 : 0.035); G.zp = Math.max(G.zp, how === 'exec' ? 0.09 : 0.05); }
   if (G.player.lock === e) G.player.lock = null;
-  if (ETYPE[e.t].boss) { banner(e.t === 'hdl' ? 'THE HANDLER IS DOWN' : e.t === 'hst' ? 'THE HOST IS DOWN' : e.t === 'chr' || e.t === 'chr2' ? 'THE CHAIR IS DOWN' : e.t === 'dir' ? 'HALE IS DOWN' : G.ents.some(o => o !== e && ETYPE[o.t].boss && o.st !== 'dead') ? 'ONE TWIN DOWN' : 'BOTH TWINS DOWN', '#ffe14d'); G.hitStop = 0.15; }
+  if (ETYPE[e.t].boss) { banner(e.t === 'hdl' ? 'THE HANDLER IS DOWN' : e.t === 'hst' ? 'THE HOST IS DOWN' : e.t === 'chr' || e.t === 'chr2' ? 'THE CHAIR IS DOWN' : e.t === 'dir' ? 'HALE IS DOWN' : e.t === 'mrw' ? 'MARROW IS DOWN' : G.ents.some(o => o !== e && ETYPE[o.t].boss && o.st !== 'dead') ? 'ONE TWIN DOWN' : 'BOTH TWINS DOWN', '#ffe14d'); G.hitStop = 0.15; }
   if (byP && method !== 'puppet' && how !== 'burn') coverCheck(e);
   if (byP) { G.stats.kills++; if (how === 'exec') G.stats.execs++; if (!e.everSaw) G.stats.unseen = (G.stats.unseen || 0) + 1; if (how === 'shotgun' || how === 'cut' || how === 'exec') G.stats.brutal = (G.stats.brutal || 0) + 1; addScore(how === 'exec' ? 700 : 400, e.x, e.y, how === 'burn' ? 'BURNOUT' : method === 'puppet' ? 'PUPPET' : method === 'rail' ? 'RAILED' : method === 'rocket' || method === 'frag' || method === 'barrel' ? 'BOOM' : method === 'bleed' ? 'BLED OUT' : method === 'emp' ? 'FRIED' : method === 'knife' ? 'KNIFED' : method === 'blades' ? 'SLICED' : how === 'exec' ? 'FINISHER' : how === 'throw' ? 'THROWN' : '', method);  }
   checkClear();
@@ -238,6 +239,7 @@ function attack(e, isP) {
   if (isP && e.ammo <= 0) { sfx('click'); e.cd = 0.25; toast('OUT OF AMMO - RIGHT CLICK TO THROW IT'); return; }
   if (W.knife) { if (isP) throwKnife(e); return; }
   if (W.rail) return;
+  if (W.fireball) { e.cd = W.cd * (isP ? 0.4 : rr(0.8, 1.3)); e.atk = { k: 'rec', t: 0, d: 0.2 }; hurlFireball(e, e.a, 165, false, isP); return; }
   if (W.rocket) { if (isP && UI.assist !== false) { const t = gunTarget(e); if (t) e.a = Math.atan2(t.y - e.y, t.x - e.x); } if (isP) e.ammo--; e.cd = W.cd; e.atk = { k: 'rec', t: 0, d: 0.14 }; e.flashT = 0.06; fireRocket(e, isP); return; }
   if (isP && UI.assist !== false) { const best = gunTarget(e); if (best) { const tt = Math.hypot(best.x - e.x, best.y - e.y) / 600; e.a = Math.atan2(best.y + best.vy * tt - e.y, best.x + best.vx * tt - e.x); } }
   if (isP) e.ammo--; e.cd = W.cd * (isP || e.hacked > 0 ? 1 : 1.8); e.flashT = 0.05; e.atk = { k: 'rec', t: 0, d: W.pellets > 1 ? 0.1 : 0.07, nx: e.wpn === 'pump' ? { k: 'pump', t: 0, d: 0.34 } : null };
@@ -546,7 +548,7 @@ function updateGame(dt) {
   if (G.player.lock && (G.player.lock.st === 'dead' || G.player.lock.st === 'down')) G.player.lock = null;
   for (const p of G.pops) p.t += dt; G.pops = G.pops.filter(p => p.t < 1.3);
   for (const c of G.civs) if (c.st === 'free') { c.t = (c.t || 0) + dt; if (c.t > 1.5) c.gone = true; } else if (c.st === 'run') civRun(c, dt);
-  mechUpdate(edt); heistUpdate(edt); act2bUpdate(edt); act3Update(edt); act4Update(edt); if (G.birds.length) updBirds(dt); if (G.storm) updStorm(dt); if (G.disguise) updDisguise(dt); updGuests(dt);
+  mechUpdate(edt); heistUpdate(edt); act2bUpdate(edt); act3Update(edt); act4Update(edt); islandUpdate(edt); if (G.birds.length) updBirds(dt); if (G.storm) updStorm(dt); if (G.disguise) updDisguise(dt); updGuests(dt);
   G.shake = Math.max(0, G.shake - dt * 2.5); G.flash = Math.max(0, G.flash - dt * 2); G.muzzle = Math.max(0, (G.muzzle || 0) - dt);
   if (G.banner) { G.banner.life -= dt; if (G.banner.life <= 0) G.banner = null; } if (G.toast) { G.toast.life -= dt; if (G.toast.life <= 0) G.toast = null; } if (G.lore) { G.lore.life -= dt; if (G.lore.life <= 0) G.lore = null; }
 }

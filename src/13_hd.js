@@ -113,6 +113,7 @@ function headHD(P, c, hx, hy, HR) {
     if (c.shades) { P.r(Math.round(hx + HR - 2), hy - 3, 2, 2, c.shades); P.r(Math.round(hx + HR - 2), hy + 1, 2, 2, c.shades); P.p(Math.round(hx + HR - 1), hy - 1, INK); P.p(Math.round(hx + HR - 2), hy - 3, '#ffb0b0'); }
     else if (c.eyes) { P.p(Math.round(hx + HR - 1), hy - 2, c.eyes); P.p(Math.round(hx + HR - 1), hy + 2, c.eyes); }
   }
+  if (c.horns) hornsHD(P, c, hx, hy, HR);
   if (c.implant && c.hat !== 'hard') { P.r(Math.round(hx - HR + 1), hy - 1, 2, 2, c.implant); P.p(Math.round(hx - HR + 1), hy - 1, '#fff'); }
   if (c.aug === 'spike') { P.r(Math.round(hx - HR - 2), hy - 2, 3, 4, INK); P.r(Math.round(hx - HR - 1), hy - 1, 2, 2, '#ff3bd8'); }
 }

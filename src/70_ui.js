@@ -82,7 +82,7 @@ function act(a) {
     case 'jobs': openJobs(); break;
     case 'safehouse': enterHub(); break;
     case 'hubBack': returnToHub(); break;
-    case 'levels': { const L = $('lvList'); L.innerHTML = ''; LEVELS.forEach((lv, i) => { if (lv.job || lv.hub) return; const b = document.createElement('button'); b.className = 'm'; const ok = i <= unlocked(); b.innerHTML = (ok ? (i + 1) + '. ' + lv.name : '???') + '<small>' + (ok ? (store('best' + i) ? 'BEST ' + store('best' + i) : lv.sub) : 'LOCKED') + '</small>'; if (ok) b.onclick = () => { sfx('pickup'); openIntro(i); }; L.appendChild(b); }); showPanel('pLevels'); break; }
+    case 'levels': { const L = $('lvList'); L.innerHTML = ''; LEVELS.forEach((lv, i) => { if (lv.job || lv.hub || lv.special) return; const b = document.createElement('button'); b.className = 'm'; const ok = i <= unlocked(); b.innerHTML = (ok ? (i + 1) + '. ' + lv.name : '???') + '<small>' + (ok ? (store('best' + i) ? 'BEST ' + store('best' + i) : lv.sub) : 'LOCKED') + '</small>'; if (ok) b.onclick = () => { sfx('pickup'); openIntro(i); }; L.appendChild(b); }); showPanel('pLevels'); break; }
     case 'help': showPanel('pHelp'); break;
     case 'back': if (UI.fromHub) returnToHub(); else showPanel('pTitle'); break;
     case 'sway': UI.sway = !UI.sway; store('sway', UI.sway); $('bSway').textContent = 'CAMERA SWAY: ' + (UI.sway ? 'ON' : 'OFF'); break;
@@ -93,12 +93,21 @@ function act(a) {
     case 'resume': resumeGame(); break;
     case 'restart': resumeGame(); restartFloor(); break;
     case 'quit': toTitle(); break;
-    case 'next': if (LEVELS[UI.li].job) openJobs(); else if (UI.li + 1 < STORY()) openIntro(UI.li + 1); else { showPanel('pEnd'); $('pEnd').querySelector('.big').innerHTML = 'THE<br>END'; $('endMsg').textContent = "THE BOARD IS GONE. THE BROADCAST WENT OUT FROM THEIR OWN TOWER:\nTHE TAPES, THE LEDGERS, THE CLEANUP ORDERS. EVERY NAME.\n\nPORT OSTRA WOKE UP TO IT. NADIA SAYS THE CITY IS ITS OWN AGAIN -\nNOBODY KNOWS WHAT THAT MEANS YET. THAT'S THE POINT.\n\nTHANKS FOR PLAYING NEON SIEGE."; } break;
+    case 'next': if (LEVELS[UI.li].job) openJobs(); else if (LEVELS[UI.li].special) specialNext(); else if (UI.li + 1 < STORY()) openIntro(UI.li + 1); else { showPanel('pEnd'); $('pEnd').querySelector('.big').innerHTML = 'THE<br>END'; $('endMsg').textContent = "THE BOARD IS GONE. THE BROADCAST WENT OUT FROM THEIR OWN TOWER:\nTHE TAPES, THE LEDGERS, THE CLEANUP ORDERS. EVERY NAME.\n\nPORT OSTRA WOKE UP TO IT. NADIA SAYS THE CITY IS ITS OWN AGAIN -\nNOBODY KNOWS WHAT THAT MEANS YET. THAT'S THE POINT.\n\nTHANKS FOR PLAYING NEON SIEGE."; } break;
   }
 }
-const STORY = () => LEVELS.filter(l => !l.job && !l.hub).length, money = n => '$' + Math.round(n).toLocaleString('en-US');
-function openJobs() { G.state = 'menu'; updateCashUI(); const L = $('jobList'); L.innerHTML = ''; LEVELS.forEach((lv, i) => { if (!lv.job) return; const b = document.createElement('button'); b.className = 'm'; const best = store('jobpay' + lv.name); b.innerHTML = lv.name + '<small>' + lv.pitch + (best ? '<br>BEST TAKE ' + money(best) : '') + '</small>'; b.onclick = () => { sfx('pickup'); openIntro(i); }; L.appendChild(b); }); showPanel('pJobs'); musicStart(2); }
-function openIntro(i) { UI.li = i; UI.plan = new Set(); G.state = 'menu'; const lv = LEVELS[i]; $('iWho').textContent = (lv.job ? '' : (i + 1) + '. ' + lv.name + '  //  ') + lv.msg.who; $('iMsg').textContent = lv.msg.text; showPanel('pIntro'); musicStart(2); }
+const STORY = () => LEVELS.filter(l => !l.job && !l.hub && !l.special).length, money = n => '$' + Math.round(n).toLocaleString('en-US');
+function openJobs() { G.state = 'menu'; updateCashUI(); const L = $('jobList'); L.innerHTML = ''; LEVELS.forEach((lv, i) => { if (!lv.job) return; const b = document.createElement('button'); b.className = 'm'; const best = store('jobpay' + lv.name); b.innerHTML = lv.name + '<small>' + lv.pitch + (best ? '<br>BEST TAKE ' + money(best) : '') + '</small>'; b.onclick = () => { sfx('pickup'); openIntro(i); }; L.appendChild(b); }); specialButtons(L); showPanel('pJobs'); musicStart(2); }
+// special ops: a chain of levels opened from the JOBS screen, with their own ending
+function specialButtons(L) {
+  LEVELS.forEach((lv, i) => { if (!lv.special || (i > 0 && LEVELS[i - 1].special === lv.special)) return; const b = document.createElement('button'); b.className = 'm'; b.style.borderColor = '#ff3b4e'; b.style.color = '#ffb0b8';
+    b.innerHTML = 'SPECIAL OP: ' + lv.special + '<small>' + lv.pitch + (store('op' + lv.special) ? '<br>COMPLETED' : '') + '</small>'; b.onclick = () => { sfx('pickup'); openIntro(i); }; L.appendChild(b); });
+}
+function specialNext() {
+  const lv = LEVELS[UI.li], nx = LEVELS[UI.li + 1]; if (nx && nx.special === lv.special) { openIntro(UI.li + 1); return; }
+  store('op' + lv.special, 1); showPanel('pEnd'); $('pEnd').querySelector('.big').innerHTML = lv.endBig; $('endMsg').textContent = lv.endMsg;
+}
+function openIntro(i) { UI.li = i; UI.plan = new Set(); G.state = 'menu'; const lv = LEVELS[i]; $('iWho').textContent = (lv.job ? '' : lv.special ? lv.name + '  //  ' : (i + 1) + '. ' + lv.name + '  //  ') + lv.msg.who; $('iMsg').textContent = lv.msg.text; showPanel('pIntro'); musicStart(2); }
 function openImplants() {
   const box = $('impCards'); box.innerHTML = ''; const ul = unlocked();
   for (const I of IMPLANTS) { const c = document.createElement('div'), ok = I.lv <= Math.max(ul, UI.li); c.className = 'card' + (ok ? '' : ' lock') + (UI.sel === I.k ? ' sel' : ''); c.innerHTML = (ok ? I.name : 'LOCKED') + '<small>' + (ok ? I.desc : 'BEAT LEVEL ' + I.lv) + '</small>'; if (ok) c.onclick = () => { UI.sel = I.k; sfx('pickup'); openImplants(); }; box.appendChild(c); }
@@ -111,7 +120,7 @@ function levelDone() {
   const tm = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
   const bon = [['SPEED ' + tm(t), Math.max(0, Math.round((lv.par - t) * 15))], ['VARIETY ' + flex + ' WEAPONS', flex * 300], ['UNSEEN KILLS x' + (S.unseen || 0), (S.unseen || 0) * 150], ['BRUTALITY x' + (S.brutal || 0), (S.brutal || 0) * 100], ['DOOR SLAMS x' + (S.doors || 0), (S.doors || 0) * 200], ['MAX COMBO x' + G.comboMax, Math.max(0, G.comboMax - 1) * 250], [deaths ? 'DEATHS x' + deaths : 'NO DEATHS', deaths ? -Math.min(G.score * 0.3, deaths * 400) | 0 : 1500]];
   const total = Math.max(0, G.score + bon.reduce((a, b) => a + b[1], 0));
-  const best = Math.max(store('best' + G.li) || 0, total); store('best' + G.li, best); store('unlocked', Math.max(unlocked(), G.li + 1));
+  const best = Math.max(store('best' + G.li) || 0, total); store('best' + G.li, best); if (!lv.job && !lv.special && !lv.hub) store('unlocked', Math.max(unlocked(), G.li + 1));
   const rows = [['KILLS', S.kills], ['FINISHERS', S.execs], S.freed ? ['CAPTIVES FREED', S.freed] : null, ['KILL POINTS', G.score]].filter(Boolean).concat(bon.map(b => [b[0], (b[1] >= 0 ? '+' : '') + b[1]])).concat([['TOTAL', total]]);
   UI.lastRows = rows;
   const par0 = Math.max(1, S.kills) * 800, k0 = total / par0, gr0 = k0 > 2.1 ? 'S' : k0 > 1.7 ? 'A+' : k0 > 1.35 ? 'A' : k0 > 1.05 ? 'B' : k0 > 0.75 ? 'C' : 'D'; let earned = 0;

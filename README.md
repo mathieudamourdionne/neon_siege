@@ -29,6 +29,7 @@ Open `dist/index.html` in a desktop browser (Chrome works best). It also runs on
   - Act 3, The Tower: curfew streets patrolled by searchlight drones, a lobby full of auto-turrets, floors that black out, and Director Hale's rail lance on the Spire roof. You pick an implant (Overdrive, Dash, Plating, Neural Spike, Reflex, Ghost, Arm Blades) before every level.
   - Act 4, The Board: laser grids on the executive floors, panic gas in the Spire's core, and The Chair in an army combat suit on floor 100. Then THE END.
 - **Jobs:** 5 loud heists: Tidewater Vault, Convoy Breach, Glass House, Cold Storage and Skyline Safe. They have loot bags, drills that jam, charges, keycards, assault waves and a payout.
+- **Special op - Black Sand** (on the JOBS screen): three levels on Marrow Key. Take the blackmail from three wall safes, free the kids from the cellar (nothing can hurt them; they run for the boat), then go into the temple, where the guests have turned into demons. Imps, fire-throwing fiends, hell brutes and Silas Marrow himself. Shoot fireballs down or swing at them to knock them back. Demons don't die, they come apart.
 - **Safehouse:** a walkable hideout where you spend the cash you earn on a starting weapon, upgrades (Kevlar, Brawler, Steady Hands and more), jackets and job planning.
 - **Weapons:** about 25, including pipe, bat, katana, arc saw, sledgehammer, fire axe, bottle, pistols, silenced pistol, revolver, smart pistol, SMG, assault rifle, shotguns, sniper rifle, belt-fed machine gun, rail gun, rockets, flare gun and grenades.
 - **Combat:**
@@ -65,6 +66,7 @@ Main files in `src/`:
 |---|---|
 | `13_hd.js`, `14_hdobj.js` | Character, weapon and furniture art |
 | `40`–`42d_levels*.js` | Story levels |
+| `42e_island.js` | Special op: Black Sand |
 | `43_jobs.js` | The jobs |
 | `45_safehouse.js` | Safehouse, shop and planning |
 | `50_game.js` | Core gameplay and AI |
@@ -73,6 +75,7 @@ Main files in `src/`:
 | `58_act2b.js` | Cameras, spreading fire, chandeliers, The Host |
 | `58_act3.js` | Drones, turrets, blackouts, Director Hale |
 | `58_act4.js` | Laser grids, panic gas, The Chair's combat suit |
+| `58_island.js` | Island art, demons, fireballs, demon gore, Marrow |
 | `59_destroy.js` | Destruction |
 | `60_render.js` | Rendering |
 | `70_ui.js` | Menus and results |
@@ -98,6 +101,7 @@ node tools/act2_test.js
 node tools/act2b_test.js     # cameras, fire, chandeliers, The Host
 node tools/act3_test.js      # drones, turrets, blackouts, Director Hale
 node tools/act4_test.js      # lasers, gas, The Chair, the ending
+node tools/island_test.js    # Black Sand: safes, kids, fireballs, gore, Marrow
 node tools/doorjam.js
 node tools/fuzz.js           # random play, looks for errors
 node tools/analyze.js        # map checks + overview images in shots/maps
